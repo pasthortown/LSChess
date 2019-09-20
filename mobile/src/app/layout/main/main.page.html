@@ -17,18 +17,21 @@
 
 <ion-content>
   <ion-row>
-      <ion-col size="12">
-        <button (click)="play()">Move</button>
-      </ion-col>
-  </ion-row>
-  <ion-row>
     <ion-col size="12">
       <table>
-        <tr *ngFor="let row of board.pieces">
+        <tr *ngFor="let square_row of board.pieces; let row = index;">
+          <td class="border-row">{{cordsY[row]}}</td>
           <td class="square"
-            *ngFor="let piece of row"
+            *ngFor="let piece of square_row; let column = index;"
+            (click)="move(row, column)"
           >
             <span class="{{ piece.image }}"></span>
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td *ngFor="let cordX of cordsX" class="border-column">
+            {{cordX}}
           </td>
         </tr>
       </table>

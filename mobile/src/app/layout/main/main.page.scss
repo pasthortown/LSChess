@@ -1,7 +1,14 @@
   table {
-    margin: 20px auto;
-    width: 80vh;
-    width: 80vh;
+    @media screen and (orientation:landscape) {
+      margin: 5px auto;
+      width: 80vh;
+      height: 80vh;
+    }
+    @media screen and (orientation:portrait) {
+      margin: 20px auto;
+      width: 80vw;
+      height: 80vw;
+    }
     border-style: solid;
     border-color: #29293d;
     border-width: 10px;
@@ -16,11 +23,18 @@
   }
   
   .square {
-    width: 10vh;
-    height: 10vh;
-    font-size: 7vh;
+    @media screen and (orientation:landscape) {
+      width: 10vh;
+      height: 10vh;
+      font-size: 7vh;
+    }
+    @media screen and (orientation:portrait) {
+      width: 10vw;
+      height: 10vw;
+      font-size: 7vw;
+    }
   }
-  
+
   tr:nth-child(odd) td:nth-child(even),
   tr:nth-child(even) td:nth-child(odd) {
     background: #f0f0f5;
@@ -45,6 +59,20 @@
     border-color: greenyellow;
   }
   
+  .border-column {
+    height: 20px;
+    font-size: 14px;
+    color: black;
+    font-weight: bold;
+  }
+
+  .border-row {
+    width: 20px;
+    font-size: 14px;
+    color: black;
+    font-weight: bold;
+  }
+
   .white {
     color: white;
     text-shadow: -1px 0 black, 0 2px black, 2px 0 black, 0 -1px black;
@@ -53,4 +81,12 @@
   .black {
     color: #3a3f4d;
     text-shadow: -1px 0 black, 0 2px black, 2px 0 black, 0 -1px black;
+  }
+
+  .shadow {
+    color: #fbff0077;
+  }
+  
+  .capture {
+    color: #ff91008c;
   }

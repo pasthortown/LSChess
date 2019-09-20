@@ -4,16 +4,20 @@ export class Piece {
     value: number;
     image: string;
 
-    constructor(value?: string) {
+    constructor(value?: string, color?: string) {
         if ( typeof value === 'undefined') {
             value = '';
         }
-        this.getPiece(value);
+        if ( typeof color === 'undefined') {
+            this.getPiece(value);
+        } else {
+            this.getPiece(value, color);
+        }
     }
 
-    getPiece(value: string) {
+    getPiece(value: string, color?: string) {
         let name = '';
-        let color = '';
+        let piece_color = '';
         const Names = {
             r: 'rook',
             n: 'knight',
@@ -24,12 +28,15 @@ export class Piece {
         };
         if (value !== ''){
             if (value.toUpperCase() == value ) {
-                color = 'white';
+                piece_color = 'white';
             } else {
-                color = 'black';
+                piece_color = 'black';
+            }
+            if ( typeof color !== 'undefined') {
+                piece_color = color;
             }
             name = Names[value.toLowerCase()];
-            this.set(name, color);
+            this.set(name, piece_color);
         } else {
             this.name = '';
             this.color = '';

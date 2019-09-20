@@ -2,7 +2,7 @@ import { Piece } from "./piece";
 
 export class Board {
     private pieces: any[];
-    private position = [];
+    public position = [];
     public game_time = 0;
 
     constructor(startPosition: string, game_time?: number) {
@@ -34,7 +34,7 @@ export class Board {
         this.drawBoard();
     }
 
-    is_numeric(str){
+    is_numeric(str: string) {
         return /^\d+$/.test(str);
     }
 
@@ -48,5 +48,36 @@ export class Board {
             }
             this.pieces.push(rowArray);
         }
+    }
+
+    drawPossibleMoves(possibleMoves: any[], piece: string) {
+        this.drawBoard();
+        const coordsX = { a: '0',
+                          b: '1',
+                          c: '2',
+                          d: '3',
+                          e: '4',
+                          f: '5',
+                          g: '6',
+                          h: '7',
+                        };
+        const coordsY = { 8: '0',
+                          7: '1',
+                          6: '2',
+                          5: '3',
+                          4: '4',
+                          3: '5',
+                          2: '6',
+                          1: '7',
+                        };
+        possibleMoves.forEach(possibleMove => {
+            const column = coordsX[possibleMove.to.substr(0,1)];
+            const row = coordsY[possibleMove.to.substr(1,1)];
+            if (typeof(possibleMove.captured) == 'undefined') {
+                this.pieces[row][column] = new Piece(piece, 'shadow');
+            } else {
+                this.pieces[row][column] = new Piece(possibleMove.captured, 'capture');
+            } 
+        });
     }
  }
