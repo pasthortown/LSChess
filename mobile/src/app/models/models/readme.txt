@@ -1,1 +1,0 @@
-Aquí se colocan los modelos para el aplicativo cliente
