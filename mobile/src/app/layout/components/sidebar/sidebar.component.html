@@ -1,0 +1,17 @@
+<ion-list>
+  <ion-menu-toggle auto-hide="false">
+    <ion-item *ngIf="refreshUser()" [routerLink]="'/profile'">
+      <ion-avatar slot="start">
+        <img src="{{ profileImg }}">
+      </ion-avatar>
+      <ion-label>{{ user.name }}</ion-label>
+      <ion-icon slot="end" name="power" (click)="logout()"></ion-icon>
+    </ion-item>
+    <ion-item [routerLink]="'/main'">
+      <ion-icon slot="start" name="speedometer"></ion-icon>
+      <ion-label>
+        Main
+      </ion-label>
+    </ion-item>
+  </ion-menu-toggle>
+</ion-list>

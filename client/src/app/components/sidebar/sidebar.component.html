@@ -1,0 +1,44 @@
+<nav class="sidebar" [ngClass]="{ sidebarPushRight: isActive, collapsed: collapsed }">
+   <div class="list-group">
+      <a [routerLink]="['/main']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+         <i class="fas fa-tachometer-alt"></i>&nbsp; <span>Main</span>
+      </a>
+      <div class="nested-menu">
+         <a class="list-group-item" (click)="addExpandClass('bdd lschess')">
+            <span class="fas fa-database"></span>&nbsp;BDD LSCHESS
+         </a>
+         <li class="nested" [class.expand]="showMenu === 'bdd lschess'">
+            <ul class="submenu">
+
+
+               //LSChess
+
+               <li>
+                  <a [routerLink]="['/game']" [routerLinkActive]="['router-link-active']" class="list-group-item">Game </a>
+               </li>
+               <li>
+                  <a [routerLink]="['/game_state']" [routerLinkActive]="['router-link-active']" class="list-group-item">GameState </a>
+               </li>
+               <li>
+                  <a [routerLink]="['/move']" [routerLinkActive]="['router-link-active']" class="list-group-item">Move </a>
+               </li>
+            </ul>
+         </li>
+      </div>
+      <div class="nested-menu">
+         <a class="list-group-item" (click)="addExpandClass('profile')">
+            <span><img class="rounded-circle" src="{{profileImg}}" width="32px" height="32px"></span>&nbsp;<small *ngIf="refreshUser()">{{ user.name }}</small>
+         </a>
+         <li class="nested" [class.expand]="showMenu === 'profile'">
+            <ul class="submenu">
+               <li>
+                  <a [routerLink]="['/profile']" [routerLinkActive]="['router-link-active']" class="list-group-item">Perfil </a>
+               </li>
+               <li>
+                  <a [routerLink]="['/login']" (click)="logOut()"><span>&nbsp;Cerrar Sesión</span></a>
+               </li>
+            </ul>
+         </li>
+      </div>
+   </div>
+</nav>

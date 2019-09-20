@@ -1,0 +1,171 @@
+<div class="row">
+   <h1 class="col-12 text-right">
+      Game
+   </h1>
+</div>
+<div class="row">
+   <div class="col-12">
+      <div class="btn-toolbar" role="toolbar">
+         <div class="btn-group mr-2" role="group">
+            <button type="button" class="btn btn-primary" title="Actualizar" (click)="goToPage(currentPage)"><i class="fas fa-sync"></i></button>
+         </div>
+         <div class="btn-group mr-2" role="group">
+            <button type="button" title="Nuevo" class="btn btn-success" (click)="newGame(content)"><i class="fas fa-file"></i></button>
+            <button type="button" title="Editar" class="btn btn-warning" (click)="editGame(content)"><i class="fas fa-edit"></i></button>
+         </div>
+         <div class="btn-group mr-2" role="group">
+            <button type="button" title="Eliminar" class="btn btn-danger" (click)="deleteGame()"><i class="fas fa-trash"></i></button>
+         </div>
+         <div class="btn-group mr-2" role="group">
+            <button type="button" title="BackUp" class="btn btn-dark" (click)="backup()"><i class="fas fa-download"></i></button>
+            <button type="button" title="Exportar CSV" class="btn btn-dark" (click)="toCSV()"><i class="fas fa-file-csv"></i></button>
+            <button type="button" title="Cargar" class="btn btn-dark" (click)="uploadInput.click()"><i class="fas fa-upload"></i></button>
+            <input [hidden]="true" type="file" class="form-control" #uploadInput (change)="decodeUploadFile($event)" accept=".json"/>
+         </div>
+      </div>
+   </div>
+</div>
+<div class="row">
+   <div class="col-12">
+      <table class="table table-hover mt-2">
+         <thead>
+            <tr>
+               <th>Seleccionado</th>
+               <th>id_player_white</th>
+               <th>id_player_black</th>
+               <th>start_time</th>
+               <th>end_time</th>
+               <th>start_position</th>
+               <th>start_move</th>
+            </tr>
+         </thead>
+         <tbody>
+            <tr *ngFor="let game of games" (click)="selectGame(game)">
+               <td class="text-right"><span *ngIf="gameSelected === game" class="far fa-hand-point-right"></span></td>
+               <td>{{game.id_player_white}}</td>
+               <td>{{game.id_player_black}}</td>
+               <td>{{game.start_time}}</td>
+               <td>{{game.end_time}}</td>
+               <td>{{game.start_position}}</td>
+               <td>{{game.start_move}}</td>
+            </tr>
+         </tbody>
+      </table>
+   </div>
+</div>
+<div class="row">
+   <div class="col-12">
+      <div class="btn-toolbar" role="toolbar">
+         <div class="btn-group mr-2" role="group">
+            <button type="button" class="btn btn-light" *ngIf="currentPage === 1" title="Primera Página" disabled>Primera</button>
+            <button type="button" class="btn btn-light" *ngIf="currentPage !== 1" title="Primera Página" (click)="goToPage(1)">Primera</button>
+            <button type="button" class="btn btn-light" *ngIf="currentPage > 1" title="Página Anterior" (click)="goToPage((currentPage*1) - 1)">{{(currentPage * 1) - 1}}</button>
+            <button type="button" class="btn btn-primary" title="Página Actual">{{currentPage}}</button>
+            <button type="button" class="btn btn-light" *ngIf="currentPage < lastPage" title="Página Siguiente" (click)="goToPage((currentPage*1) + 1)">{{(currentPage * 1) + 1}}</button>
+            <button type="button" class="btn btn-light" *ngIf="currentPage !== lastPage" title="Última Página" (click)="goToPage(lastPage)">Última</button>
+            <button type="button" class="btn btn-light" *ngIf="currentPage === lastPage" title="Última Página" disabled>Última</button>
+         </div>
+         <div class="input-group">
+            <div class="input-group-prepend">
+               <button type="button" class="input-group-text btn btn-success" title="Ir a la Página" (click)="goToPage(goToPageNumber.value)">Ir a</button>
+            </div>
+            <input type="number" min="{{1}}" max="{{lastPage}}" class="form-control" placeholder="Ir a la Página" #goToPageNumber>
+         </div>
+      </div>
+   </div>
+</div>
+<ng-template #content let-modal>
+   <div class="modal-header">
+      <h4 class="modal-title">Datos:</h4>
+      <button type="button" class="close" (click)="modal.dismiss('Cross click')">
+         <span>&times;</span>
+      </button>
+   </div>
+   <div class="modal-body">
+      <div class="row">
+         <div class="col-12">
+            <div class="form-group row">
+               <label for="id_player_white" class="col-4 col-form-label">id_player_white</label>
+               <div class="col-8">
+                  <input type="number" class="form-control" id="id_player_white" name="id_player_white" placeholder="idPlayerWhite" [(ngModel)]="gameSelected.id_player_white">
+               </div>
+            </div>
+            <div class="form-group row">
+               <label for="id_player_black" class="col-4 col-form-label">id_player_black</label>
+               <div class="col-8">
+                  <input type="number" class="form-control" id="id_player_black" name="id_player_black" placeholder="idPlayerBlack" [(ngModel)]="gameSelected.id_player_black">
+               </div>
+            </div>
+            <div class="form-group row">
+               <label for="start_time" class="col-4 col-form-label">start_time</label>
+               <div class="col-8">
+                  <input type="date" class="form-control" id="start_time" name="start_time" placeholder="startTime" [ngModel]="gameSelected.start_time | date:'y-MM-dd'" (ngModelChange)="gameSelected.start_time = $event">
+               </div>
+            </div>
+            <div class="form-group row">
+               <label for="end_time" class="col-4 col-form-label">end_time</label>
+               <div class="col-8">
+                  <input type="date" class="form-control" id="end_time" name="end_time" placeholder="endTime" [ngModel]="gameSelected.end_time | date:'y-MM-dd'" (ngModelChange)="gameSelected.end_time = $event">
+               </div>
+            </div>
+            <div class="form-group row">
+               <label for="start_position" class="col-4 col-form-label">start_position</label>
+               <div class="col-8">
+                  <ck-editor id="start_position" name="start_position" skin="moono-lisa" [(ngModel)]="gameSelected.start_position"></ck-editor>
+               </div>
+            </div>
+            <div class="form-group row">
+               <label for="start_move" class="col-4 col-form-label">start_move</label>
+               <div class="col-8">
+                  <input type="text" class="form-control" id="start_move" name="start_move" placeholder="startMove" [(ngModel)]="gameSelected.start_move">
+               </div>
+            </div>
+            <div class="form-group row">
+               <label for="game_state_id" class="col-4 col-form-label">GameState</label>
+               <div class="col-8">
+                  <select class="form-control" id="game_state_id" name="game_state_id" [(ngModel)]="gameSelected.game_state_id">
+                     <option value="0" selected>Seleccione...</option>
+                     <option *ngFor="let game_state of game_states" value={{game_state.id}}>
+                        {{game_state.id}}
+                     </option>
+                  </select>
+               </div>
+            </div>
+            <div class="form-group row">
+               <label class="col-12 col-form-label mb-2"><strong>Moves</strong></label>
+               <label class="col-4 col-form-label">Move</label>
+               <div class="col-8">
+                  <div class="input-group">
+                     <div class="input-group-prepend">
+                        <button type="button" title="Eliminar" class="btn btn-danger" (click)="removeMove()"><i class="fas fa-trash"></i></button>
+                        <button type="button" title="Agregar" class="btn btn-success" (click)="addMove()"><i class="fas fa-plus-circle"></i></button>
+                     </div>
+                     <select class="form-control" id="move_id" name="move_id" [(ngModel)]="moves_gameSelectedId">
+                        <option value="0" selected>Seleccione...</option>
+                        <option *ngFor="let move of moves" value={{move.id}}>
+                           {{move.id}}
+                        </option>
+                     </select>
+                  </div>
+               </div>
+               <div class="col-4">
+               </div>
+               <div class="col-8">
+                  <table class="table table-hover mt-2">
+                     <tbody>
+                        <tr *ngFor="let move of gameSelected.moves_on_game" (click)="selectMove(move)">
+                           <td class="text-right"><span *ngIf="moves_gameSelectedId === move.id" class="far fa-hand-point-right"></span></td>
+                           <td>{{move.id}}</td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+   <div class="modal-footer">
+      <button type="button" class="btn btn-outline-success" (click)="modal.close('Guardar click')">Guardar</button>
+      <button type="button" class="btn btn-outline-danger" (click)="modal.close('Cancelar click')">Cancelar</button>
+   </div>
+</ng-template>

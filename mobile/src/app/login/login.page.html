@@ -1,0 +1,55 @@
+<div class="login-container">
+  <div class="pretty-form">
+    <ion-row class="logo-row">
+      <ion-col col-1></ion-col>
+      <ion-col col-10 text-center>
+        <img col-12 src="assets/images/accounts.png" />
+      </ion-col>
+      <ion-col col-1></ion-col>
+    </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-list>
+            <ion-item>
+              <ion-label position="floating">Correo Electrónico:</ion-label>
+              <ion-input
+                type="email"
+                id="email"
+                placeholder="Correo Electrónico"
+                [(ngModel)]="email"
+              ></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Contraseña:</ion-label>
+              <ion-input
+                type="password"
+                id="password"
+                placeholder="Contraseña"
+                [(ngModel)]="password"
+              ></ion-input>
+            </ion-item>
+            <ion-item *ngIf="esperando">
+              <ion-label text-center color="primary">Espere ... </ion-label>
+            </ion-item>
+          </ion-list>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col text-center>
+          <ion-button type="submit" color="success" size="small" (click)="login()"
+            >Ingresar</ion-button
+          >
+          <ion-button color="primary" size="small" [routerLink]="['/register']"
+            >Crear Cuenta</ion-button
+          >
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col text-center>
+          <ion-label color="warning" size="small" (click)="password_recovery()"
+            >Recuperar Contraseña</ion-label
+          >
+        </ion-col>
+      </ion-row>
+  </div>
+</div>
