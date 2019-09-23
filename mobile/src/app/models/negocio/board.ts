@@ -50,6 +50,16 @@ export class Board {
         }
     }
 
+    check(turn: string) {
+        this.pieces.forEach(row => {
+            row.forEach(piece => {
+                if (piece.name == 'king' && piece.color == turn) {
+                    piece.set('king', 'check');
+                }
+            }); 
+        });
+    }
+
     drawPossibleMoves(possibleMoves: any[], piece: string) {
         this.drawBoard();
         const coordsX = { a: '0',

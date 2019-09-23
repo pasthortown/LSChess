@@ -3,6 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { Board } from 'src/app/models/negocio/board';
 import * as Chess from 'chess.js';
 import { Move } from 'src/app/models/LSCHESS/Move';
+import Swal from 'sweetalert2'
+import { PickerController } from '@ionic/angular';
+import { PickerOptions, PickerButton } from '@ionic/core';
 
 @Component({
   selector: 'app-main',
@@ -17,11 +20,47 @@ export class MainPage implements OnInit {
   cordsX = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
   cordsY = ['8', '7', '6', '5', '4', '3', '2', '1'];
 
-  constructor() { 
+  constructor(private pickerCtrl: PickerController) { 
     this.board = new Board(this.chess.fen().split(' ')[0],5);
   }
 
   ngOnInit() {
+    
+  }
+
+  new_game() {
+    this.chess.reset();
+    this.refresh_board();
+  }
+
+  async showPropotionMenu(from: string, to: string) {
+    let opts: PickerOptions = {
+      buttons: [
+        {
+          text: 'Seleccionar',
+          cssClass: 'special-done'
+        }
+      ],
+      columns: [
+        {
+          name: 'piece',
+          options: [
+            { text: 'Torre', value: 'r' },
+            { text: 'Caballo', value: 'n' },
+            { text: 'Alfil', value: 'b' },
+            { text: 'Dama', value: 'q' }
+          ]
+        }
+      ]
+    };
+    let picker = await this.pickerCtrl.create(opts);
+    picker.present();
+    picker.onDidDismiss().then(async data => {
+      const piece = await picker.getColumn('piece');
+      this.chess.move({ from: from, to: to, promotion: piece.options[piece.selectedIndex].value});
+      this.newMove = new Move();
+      this.refresh_board();
+    });
   }
 
   play_pc() {
@@ -31,16 +70,18 @@ export class MainPage implements OnInit {
       let move = possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
       this.chess.move(move);
       this.refresh_board();
-    } else {
-      console.log(gameOver);
     }
   }
 
   refresh_board() {
     this.board.newPosition(this.chess.fen().split(' ')[0]);
+    this.check_specials();
   }
 
   move(row: number, column: number) {
+    if(this.chess.game_over()) {
+      return;
+    }
     const square_piece = this.get_square_piece(row,column); 
     if (square_piece.piece == '' && this.newMove.from == '') {
       return;
@@ -56,15 +97,25 @@ export class MainPage implements OnInit {
       this.board.drawPossibleMoves(this.get_possible_moves(this.newMove.from), square_piece.piece);
     } else {
       this.newMove.to = this.cordsX[column] + this.cordsY[row];
-      if (row == 0 || row == 7 && this.newMove.piece_moving == 'p') {
-        // mejorar la promocion
-        this.chess.move({ from: this.newMove.from, to: this.newMove.to, promotion: 'q'});
+      const possibleMoves = this.get_possible_moves(this.newMove.from);
+      let continueMoving = false;
+      possibleMoves.forEach(possibleMove => {
+        if (possibleMove.to == this.newMove.to) {
+          continueMoving = true;
+        }
+      });
+      if (!continueMoving) {
+        this.refresh_board();
+        this.newMove = new Move();
+        return;
+      }
+      if (( row == 0 || row == 7 ) && this.newMove.piece_moving == 'p') {
+        this.showPropotionMenu(this.newMove.from, this.newMove.to);
       } else {
         this.chess.move({ from: this.newMove.from, to: this.newMove.to });
+        this.refresh_board();
+        this.newMove = new Move();
       }
-      console.log(this.check_specials());
-      this.refresh_board();
-      this.newMove = new Move();
     }
   }
 
@@ -94,25 +145,58 @@ export class MainPage implements OnInit {
     let turn = {w: 'white', b: 'black'};
     return turn[this.chess.turn()];
   }
+  
+  get_PGN() {
+    return this.chess.pgn({ max_width: 5, newline_char: '<br />' });
+  }
 
   check_specials() {
+    let turno = 'Negras';
+    if (this.get_turn() == 'white') {
+      turno = 'Blancas';
+    }
     if (this.chess.in_check()) {
-      alert('jaque');
+      this.board.check(this.get_turn());
     }
     if (this.chess.in_checkmate()) {
-      alert('jaque mate');
+      Swal.fire({
+        title: 'Jaque Mate!',
+        text: 'Pierden las ' + turno,
+        type: 'success',
+        confirmButtonText: 'Aceptar'
+      });
     }
     if (this.chess.in_draw()) {
-      alert('tabla');
-    }
-    if (this.chess.in_stalemate()) {
-      alert('ahogado');
-    }
-    if (this.chess.in_threefold_repetition()) {
-      alert('tres posiciones iguales');
-    }
-    if (this.chess.insufficient_material()) {
-      alert('Material insuficiente');
+      if (this.chess.in_stalemate()) {
+        Swal.fire({
+          title: 'Tablas!',
+          text: 'Ahogado, no es posible hacer más movimientos.',
+          type: 'success',
+          confirmButtonText: 'Aceptar'
+        }).then(r => {
+          this.new_game();
+        });
+      }
+      if (this.chess.in_threefold_repetition()) {
+        Swal.fire({
+          title: 'Tablas!',
+          text: 'Repetición.',
+          type: 'success',
+          confirmButtonText: 'Aceptar'
+        }).then(r => {
+          this.new_game();
+        });
+      }
+      if (this.chess.insufficient_material()) {
+        Swal.fire({
+          title: 'Tablas!',
+          text: 'Material insuficiente.',
+          type: 'success',
+          confirmButtonText: 'Aceptar'
+        }).then(r => {
+          this.new_game();
+        });
+      }
     }
   }
 
@@ -143,10 +227,6 @@ export class MainPage implements OnInit {
     '23.Bd7+ Kf8 24.Bxe7# 1-0'];
     this.chess.load_pgn(newPGN.join('\n'));
     this.refresh_board();
-  }
-
-  get_PGN() {
-    return this.chess.pgn({ max_width: 5, newline_char: '<br />' });
   }
 
   undo_move() {

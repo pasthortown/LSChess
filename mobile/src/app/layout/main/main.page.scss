@@ -15,6 +15,18 @@
     background: #666699;
   }
   
+  .white-turn {
+    color: white;
+    font-size: 20px;
+    text-shadow: -1px 0 black, 0 2px black, 2px 0 black, 0 -1px black;
+  }
+
+  .black-turn {
+    color: #3a3f4d;
+    font-size: 20px;
+    text-shadow: -1px 0 black, 0 2px black, 2px 0 black, 0 -1px black;
+  }
+  
   td {
     text-align: center;
     border-style: solid;
@@ -89,4 +101,8 @@
   
   .capture {
     color: #ff91008c;
+  }
+  
+  .check {
+    color: #d317178c;
   }

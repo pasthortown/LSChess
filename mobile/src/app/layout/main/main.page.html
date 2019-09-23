@@ -3,21 +3,23 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title
-      ><span
-        ><img
-          src="assets/images/logo.png"
-          height="24px"
-          width="24px"
-          style="margin-top: 5px;"/></span
-      >&nbsp;{{ appName }}
+    <ion-title style="font-size: 14px;">
+      <ion-label>
+        <strong>Juegan:</strong>&nbsp;<i class="fas fa-square white-turn" *ngIf="get_turn()=='white'"></i><i class="fas fa-square black-turn" *ngIf="get_turn()=='black'"></i>
+      </ion-label>&nbsp;&nbsp;
+      <ion-label>
+        <strong>Blancas:</strong>&nbsp;10:00
+      </ion-label>&nbsp;&nbsp;
+      <ion-label>
+        <strong>Negras:</strong>&nbsp;10:00
+      </ion-label>
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-row>
-    <ion-col size="12">
+    <ion-col size-xs="12" size-sm="12" size-md="8" size-lg="8" size-xg="8">
       <table>
         <tr *ngFor="let square_row of board.pieces; let row = index;">
           <td class="border-row">{{cordsY[row]}}</td>
@@ -36,5 +38,30 @@
         </tr>
       </table>
     </ion-col>
+    <ion-col size-xs="12" size-sm="12" size-md="4" size-lg="4" size-xg="4">
+      <ion-list>
+        <ion-list-header>
+          <ion-label>
+            <strong>Histórico:</strong>
+          </ion-label>
+        </ion-list-header>
+        <ion-item>
+          <ion-label [innerHTML]="get_PGN()" style="overflow-y: auto; overflow-x: hidden; height: 150px;">
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-col>
   </ion-row>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button>
+      <ion-icon name="logo-game-controller-b"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="top">
+      <ion-fab-button (click)="new_game()" title="Reiniciar"><i class="fas fa-undo"></i></ion-fab-button>
+      <ion-fab-button (click)="undo_move()" title="Deshacer Movimiento"><i class="fas fa-arrow-left"></i></ion-fab-button>
+      <ion-fab-button title="Guardar Partida"><i class="fas fa-save"></i></ion-fab-button>
+      <ion-fab-button title="Cargar Partida"><i class="fas fa-folder-open"></i></ion-fab-button>
+      <ion-fab-button title="Establecer Posición"><i class="fas fa-pencil-alt"></i></ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
 </ion-content>
