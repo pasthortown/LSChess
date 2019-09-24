@@ -4,6 +4,9 @@ export class Board {
     private pieces: any[];
     public position = [];
     public game_time = 0;
+    public captured_by_white: Piece[] = [];
+    public captured_by_black: Piece[] = [];
+    public white_side = true;
 
     constructor(startPosition: string, game_time?: number) {
         this.newPosition(startPosition);
@@ -12,6 +15,15 @@ export class Board {
         } else {
             this.game_time = game_time * 60;
         }
+    }
+
+    rotate_board() {
+       if (this.white_side) {
+           this.white_side = false;
+       } else {
+           this.white_side = true;
+       }
+       this.drawBoard();
     }
 
     newPosition(position: string) {
@@ -40,14 +52,34 @@ export class Board {
 
     drawBoard() {
         this.pieces = [];
+        this.captured_by_black = [];
+        this.captured_by_white = [];
+        const origins = { r: 2, n: 2, b: 2, q: 1, p: 8, R: 2, N: 2, B: 2, Q: 1, P: 8, K: 1, k: 1};
+        let residues = { r: 0, n: 0, b: 0, q: 0, p: 0, R: 0, N: 0, B: 0, Q: 0, P: 0, K: 0, k: 0};
         for ( let row = 0; row < 8 ; row ++) {
             const rowArray = [];
             for ( let column = 0; column < 8; column ++) {
-                const piece = new Piece(this.position[row][column]);
+                let piece = new Piece();
+                if (this.white_side) {
+                    piece = new Piece(this.position[row][column]);    
+                } else {
+                    piece = new Piece(this.position[7-row][7-column]);   
+                }
+                residues[this.position[row][column]] = residues[this.position[row][column]] + 1;
                 rowArray.push(piece);
             }
             this.pieces.push(rowArray);
         }
+        const toCheck = ['r', 'n', 'b', 'q', 'p'];
+        toCheck.forEach(elementBlack => {
+            for (let i = 0; (i < origins[elementBlack] - residues[elementBlack]) && (origins[elementBlack] - residues[elementBlack] > 0); i++) {
+                this.captured_by_white.push(new Piece(elementBlack, 'black'));
+            }
+            const elementWhite = elementBlack.toUpperCase();
+            for (let i = 0; (i < origins[elementWhite] - residues[elementWhite]) && (origins[elementWhite] - residues[elementWhite] > 0); i++) {
+                this.captured_by_black.push(new Piece(elementWhite, 'white'));
+            }
+        });
     }
 
     check(turn: string) {
@@ -62,7 +94,7 @@ export class Board {
 
     drawPossibleMoves(possibleMoves: any[], piece: string) {
         this.drawBoard();
-        const coordsX = { a: '0',
+        let coordsX = { a: '0',
                           b: '1',
                           c: '2',
                           d: '3',
@@ -71,7 +103,7 @@ export class Board {
                           g: '6',
                           h: '7',
                         };
-        const coordsY = { 8: '0',
+        let coordsY = { 8: '0',
                           7: '1',
                           6: '2',
                           5: '3',
@@ -80,6 +112,26 @@ export class Board {
                           2: '6',
                           1: '7',
                         };
+        if (!this.white_side) {
+            coordsX = { a: '7',
+                b: '6',
+                c: '5',
+                d: '4',
+                e: '3',
+                f: '2',
+                g: '1',
+                h: '0',
+            };
+            coordsY = { 8: '7',
+                7: '6',
+                6: '5',
+                5: '4',
+                4: '3',
+                3: '2',
+                2: '1',
+                1: '0',
+            };
+        }
         possibleMoves.forEach(possibleMove => {
             const column = coordsX[possibleMove.to.substr(0,1)];
             const row = coordsY[possibleMove.to.substr(1,1)];
