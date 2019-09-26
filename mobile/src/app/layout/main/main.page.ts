@@ -381,7 +381,7 @@ export class MainPage implements OnInit {
   }
   
   get_PGN() {
-    return this.chess.pgn({ max_width: 5, newline_char: '<br />' });
+    return '<strong>Histórico</strong><br/>' + this.chess.pgn({ max_width: 5, newline_char: '<br />' });
   }
 
   check_specials() {

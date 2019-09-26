@@ -51,26 +51,21 @@
           <ion-list>
             <ion-list-header>
               <ion-label>
-                <strong>Histórico:</strong>
-              </ion-label>          
-            </ion-list-header>
-            <ion-item>
-              <ion-label>
                 <input
                   type="file"
                   #cargarPartidaInput
                   [hidden]="true"
-                  accept="image/*"
+                  accept=".json"
                   name="files[]"
                   (change)="cargarPartida($event)"
                 />
                 <ion-button (click)="undo_move()" title="Deshacer Movimiento" shape="round" size="small"><i class="fas fa-arrow-left"></i></ion-button>
                 <ion-button (click)="save_pgn()" title="Guardar Partida" color="tertiary" shape="round" size="small"><i class="fas fa-save"></i></ion-button>
                 <ion-button title="Cargar Partida" color="tertiary" shape="round" size="small" (click)="cargarPartidaInput.click()"><i class="fas fa-folder-open"></i></ion-button>
-              </ion-label>
-            </ion-item>
+              </ion-label>          
+            </ion-list-header>
             <ion-item>
-              <ion-label [innerHTML]="get_PGN()" style="overflow-y: auto; overflow-x: hidden; height: 150px;">
+              <ion-label [innerHTML]="get_PGN()" style="overflow-y: auto; overflow-x: hidden; height: 80px;">
               </ion-label>
             </ion-item>
           </ion-list>
