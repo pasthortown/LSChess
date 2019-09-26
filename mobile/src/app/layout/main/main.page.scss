@@ -24,9 +24,9 @@
   }
   
   .square {
-    width: 9vh;
-    height: 9vh;
-    font-size: 7vh;
+    width: 8.5vh;
+    height: 8.5vh;
+    font-size: 6.5vh;
   }
 
   tr:nth-child(odd) td:nth-child(even),
@@ -81,7 +81,7 @@
   }
   
   .capture {
-    color: rgba(212, 128, 18, 0.4);
+    color: rgba(226, 159, 13, 0.7);
     text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
   }
   
