@@ -37,9 +37,8 @@ export class MainPage implements OnInit {
   sizeLeftPanel = 8;
   sizeRightPanel = 4;
 
-  constructor(private pickerCtrl: PickerController, private screenOrientation: ScreenOrientation) { 
+  constructor(private pickerCtrl: PickerController) { 
     this.board = new Board(this.chess.fen().split(' ')[0],5);
-    this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.LANDSCAPE);
   }
 
   ngOnInit() {

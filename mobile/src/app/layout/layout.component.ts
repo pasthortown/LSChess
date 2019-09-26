@@ -9,7 +9,8 @@ import { ProfilePicture } from '../models/profile/ProfilePicture';
 })
 export class LayoutComponent implements OnInit {
 
-  constructor(private profilePictureDataService: ProfilePictureService) { }
+  constructor(private profilePictureDataService: ProfilePictureService) { 
+  }
 
   ngOnInit() {
     this.getProfilePicture();
