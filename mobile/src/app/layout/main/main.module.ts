@@ -6,6 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { MainPage } from './main.page';
+import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 
 const routes: Routes = [
   {
@@ -20,6 +21,9 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes)
+  ],
+  providers: [
+    ScreenOrientation,
   ],
   declarations: [MainPage]
 })
