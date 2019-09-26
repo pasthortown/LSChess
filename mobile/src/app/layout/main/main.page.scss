@@ -1,14 +1,5 @@
   table {
-    @media screen and (orientation:landscape) {
-      margin: 5px auto;
-      width: 80vh;
-      height: 80vh;
-    }
-    @media screen and (orientation:portrait) {
-      margin: 20px auto;
-      width: 80vw;
-      height: 80vw;
-    }
+    margin: 5px auto;
     border-style: solid;
     border-color: #29293d;
     border-width: 10px;

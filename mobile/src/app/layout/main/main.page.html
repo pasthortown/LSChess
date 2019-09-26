@@ -19,7 +19,7 @@
 
 <ion-content>
   <ion-row>
-    <ion-col size-xs="12" size-sm="12" size-md="8" size-lg="8" size-xg="8">
+    <ion-col [size]="sizeLeftPanel">
       <ion-row>
         <div style="margin: auto;" *ngIf="board.white_side">
           {{player_black}}&nbsp;<i *ngFor="let piece of board.captured_by_black" class="{{ piece.image }}" style="margin-left: 5px;"></i>
@@ -30,8 +30,8 @@
       </ion-row>
       <table>
         <tr *ngFor="let square_row of board.pieces; let row = index;">
-          <td class="border-row" *ngIf="board.white_side">{{cordsY[row]}}</td>
-          <td class="border-row" *ngIf="!board.white_side">{{cordsY[7-row]}}</td>
+          <td class="border-row" *ngIf="board.white_side" style="font-size: 10px;">{{cordsY[row]}}</td>
+          <td class="border-row" *ngIf="!board.white_side" style="font-size: 10px;">{{cordsY[7-row]}}</td>
           <td class="square"
             *ngFor="let piece of square_row; let column = index;"
             (click)="move(row, column)"
@@ -41,13 +41,13 @@
         </tr>
         <tr *ngIf="board.white_side">
           <td></td>
-          <td *ngFor="let cordX of cordsX" class="border-column">
+          <td *ngFor="let cordX of cordsX" class="border-column" style="font-size: 10px;">
             {{cordX}}
           </td>
         </tr>
         <tr *ngIf="!board.white_side">
           <td></td>
-          <td *ngFor="let cordX of cordsXI" class="border-column">
+          <td *ngFor="let cordX of cordsXI" class="border-column" style="font-size: 10px;">
             {{cordX}}
           </td>
         </tr>
@@ -61,7 +61,7 @@
         </div>
       </ion-row>
     </ion-col>
-    <ion-col size-xs="12" size-sm="12" size-md="4" size-lg="4" size-xg="4">
+    <ion-col [size]="sizeRightPanel">
       <ion-list>
         <ion-list-header>
           <ion-label>

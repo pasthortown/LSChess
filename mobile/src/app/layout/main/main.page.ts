@@ -35,13 +35,23 @@ export class MainPage implements OnInit {
   current_move = 0;
   checking_move = 0;
   currentScreenOrientation = '';
+  sizeLeftPanel = 8;
+  sizeRightPanel = 4;
 
   constructor(private pickerCtrl: PickerController, private screenOrientation: ScreenOrientation) { 
     this.board = new Board(this.chess.fen().split(' ')[0],5);
     this.screenOrientation.onChange().subscribe(
       () => {
           this.currentScreenOrientation = this.screenOrientation.type;
-          alert(this.currentScreenOrientation);
+          if (this.currentScreenOrientation.toUpperCase() == this.screenOrientation.ORIENTATIONS.LANDSCAPE_PRIMARY
+          || this.currentScreenOrientation.toUpperCase() == this.screenOrientation.ORIENTATIONS.LANDSCAPE_SECONDARY
+          || this.currentScreenOrientation.toUpperCase() == this.screenOrientation.ORIENTATIONS.LANDSCAPE) {
+            this.sizeLeftPanel = 8;
+            this.sizeRightPanel = 4;
+          } else {
+            this.sizeLeftPanel = 12;
+            this.sizeRightPanel = 12;
+          }
       }
     );
   }
