@@ -38,7 +38,7 @@
   }
   
   td:hover {
-    background-color: #95ce6d9b;
+    background-color: rgba(70, 139, 76, 0.8);
     border-style: solid;
     border-width: 2px;
     border-color: greenyellow;
@@ -46,8 +46,8 @@
   
   tr:nth-child(odd):hover td:nth-child(even):hover,
   tr:nth-child(even):hover td:nth-child(odd):hover {
-    background-color: #95ce6d9b;
-    background-color: #95ce6d9b;
+    background-color: rgba(70, 139, 76, 0.8);
+    background-color: rgba(70, 139, 76, 0.8);
     border-style: solid;
     border-width: 2px;
     border-color: greenyellow;
@@ -78,16 +78,16 @@
   }
 
   .shadow {
-    color: #787942;
+    color: rgba(228, 231, 39, 0.5);
     text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
   }
   
   .capture {
-    color: #ce801a;
+    color: rgba(206, 110, 55, 0.5);
     text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
   }
   
   .check {
-    color: #d31717;
+    color: rgba(221, 49, 49, 0.5);
     text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
   }
