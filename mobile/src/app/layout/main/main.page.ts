@@ -8,7 +8,6 @@ import { PickerController } from '@ionic/angular';
 import { PickerOptions, PickerButton } from '@ionic/core';
 import { saveAs } from 'file-saver/FileSaver';
 import { Cycle } from 'src/app/models/negocio/cycle';
-import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 
 @Component({
   selector: 'app-main',
@@ -34,8 +33,8 @@ export class MainPage implements OnInit {
   user = '';
   current_move = 0;
   checking_move = 0;
-  sizeLeftPanel = 8;
-  sizeRightPanel = 4;
+  sizeLeftPanel = 6;
+  sizeRightPanel = 6;
 
   constructor(private pickerCtrl: PickerController) { 
     this.board = new Board(this.chess.fen().split(' ')[0],5);

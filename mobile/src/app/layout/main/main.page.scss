@@ -33,23 +33,22 @@
   tr:nth-child(even) td:nth-child(odd) {
     background: #f0f0f5;
     border-style: solid;
-    border-width: 2px;
+    border-width: 1px;
     border-color: #f0f0f5;
   }
   
   td:hover {
     background-color: rgba(70, 139, 76, 0.8);
     border-style: solid;
-    border-width: 2px;
+    border-width: 1px;
     border-color: greenyellow;
   }
   
   tr:nth-child(odd):hover td:nth-child(even):hover,
   tr:nth-child(even):hover td:nth-child(odd):hover {
     background-color: rgba(70, 139, 76, 0.8);
-    background-color: rgba(70, 139, 76, 0.8);
     border-style: solid;
-    border-width: 2px;
+    border-width: 1px;
     border-color: greenyellow;
   }
   
@@ -78,12 +77,12 @@
   }
 
   .shadow {
-    color: rgba(228, 231, 39, 0.5);
+    color: rgba(125, 228, 29, 0.5);
     text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
   }
   
   .capture {
-    color: rgba(206, 110, 55, 0.5);
+    color: rgba(218, 119, 38, 0.5);
     text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
   }
   

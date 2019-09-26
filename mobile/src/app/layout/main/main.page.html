@@ -19,15 +19,7 @@
 
 <ion-content>
   <ion-row>
-    <ion-col [size]="sizeLeftPanel">
-      <ion-row>
-        <div style="margin: auto;" *ngIf="board.white_side">
-          {{player_black}}&nbsp;<i *ngFor="let piece of board.captured_by_black" class="{{ piece.image }}" style="margin-left: 5px;"></i>
-        </div>
-        <div style="margin: auto;" *ngIf="!board.white_side">
-          {{player_white}}&nbsp;<i *ngFor="let piece of board.captured_by_white" class="{{ piece.image }}" style="margin-left: 5px;"></i>
-        </div>
-      </ion-row>
+    <ion-col size="6">
       <table>
         <tr *ngFor="let square_row of board.pieces; let row = index;">
           <td class="border-row" *ngIf="board.white_side" style="font-size: 10px;">{{cordsY[row]}}</td>
@@ -52,53 +44,72 @@
           </td>
         </tr>
       </table>
-      <ion-row>
-        <div style="margin: auto;" *ngIf="board.white_side">
-          {{player_white}}&nbsp;<i *ngFor="let piece of board.captured_by_white" class="{{ piece.image }}" style="margin-left: 5px;"></i>
-        </div>
-        <div style="margin: auto;"*ngIf="!board.white_side">
-          {{player_black}}&nbsp;<i *ngFor="let piece of board.captured_by_black" class="{{ piece.image }}" style="margin-left: 5px;"></i>
-        </div>
-      </ion-row>
     </ion-col>
-    <ion-col [size]="sizeRightPanel">
-      <ion-list>
-        <ion-list-header>
-          <ion-label>
-            <strong>Histórico:</strong>
-          </ion-label>          
-          <ion-label>
-            <input
-              type="file"
-              #cargarPartidaInput
-              [hidden]="true"
-              accept="image/*"
-              name="files[]"
-              (change)="cargarPartida($event)"
-            />
-            <ion-button (click)="undo_move()" title="Deshacer Movimiento" shape="round" size="small"><i class="fas fa-arrow-left"></i></ion-button>
-            <ion-button (click)="save_pgn()" title="Guardar Partida" color="tertiary" shape="round" size="small"><i class="fas fa-save"></i></ion-button>
-            <ion-button title="Cargar Partida" color="tertiary" shape="round" size="small" (click)="cargarPartidaInput.click()"><i class="fas fa-folder-open"></i></ion-button>
-          </ion-label>
-        </ion-list-header>
-        <ion-item>
-          <ion-label [innerHTML]="get_PGN()" style="overflow-y: auto; overflow-x: hidden; height: 150px;">
-          </ion-label>
-        </ion-item>
-        <ion-item>
-          <ion-row style="width: 100%;">
-            <ion-col size="5">
-                <ion-button (click)="preview_move()" [disabled]="checking_move == 0" title="Movimiento Anterior" expand="block" color="secondary"><i class="fas fa-angle-left"></i></ion-button>
-            </ion-col>
-            <ion-col size="2">
-              <ion-button (click)="rotate_board()" expand="block" title="Rotar Tablero" color="medium"><i class="fas fa-sync"></i></ion-button>
-            </ion-col>
-            <ion-col size="5">
-              <ion-button (click)="next_move()" [disabled]="checking_move == current_move" expand="block" title="Movimiento Siguiente" color="secondary"><i class="fas fa-angle-right"></i></ion-button>
-            </ion-col>
-          </ion-row>
-        </ion-item>
-      </ion-list>
+    <ion-col size="6">
+      <ion-row>
+        <ion-col size="6">
+          <ion-list>
+            <ion-list-header>
+              <ion-label>
+                <strong>Histórico:</strong>
+              </ion-label>          
+              <ion-label>
+                <input
+                  type="file"
+                  #cargarPartidaInput
+                  [hidden]="true"
+                  accept="image/*"
+                  name="files[]"
+                  (change)="cargarPartida($event)"
+                />
+                <ion-button (click)="undo_move()" title="Deshacer Movimiento" shape="round" size="small"><i class="fas fa-arrow-left"></i></ion-button>
+                <ion-button (click)="save_pgn()" title="Guardar Partida" color="tertiary" shape="round" size="small"><i class="fas fa-save"></i></ion-button>
+                <ion-button title="Cargar Partida" color="tertiary" shape="round" size="small" (click)="cargarPartidaInput.click()"><i class="fas fa-folder-open"></i></ion-button>
+              </ion-label>
+            </ion-list-header>
+            <ion-item>
+              <ion-label [innerHTML]="get_PGN()" style="overflow-y: auto; overflow-x: hidden; height: 150px;">
+              </ion-label>
+            </ion-item>
+          </ion-list>
+        </ion-col>
+        <ion-col size="6">
+          <ion-list-header>
+            <ion-label>
+              <strong>Capturas:</strong>
+            </ion-label>          
+          </ion-list-header>
+          <ion-item>
+            {{player_black}}&nbsp;<i *ngFor="let piece of board.captured_by_black" class="{{ piece.image }}" style="margin-left: 5px;"></i>
+          </ion-item>
+          <ion-item>
+            {{player_white}}&nbsp;<i *ngFor="let piece of board.captured_by_white" class="{{ piece.image }}" style="margin-left: 5px;"></i>
+          </ion-item>
+          <ion-item>
+            <ion-label [innerHTML]="get_PGN()" style="overflow-y: auto; overflow-x: hidden; height: 150px;">
+            </ion-label>
+          </ion-item>  
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12">
+          <ion-list>
+            <ion-item>
+              <ion-row style="width: 100%;">
+                <ion-col size="5">
+                  <ion-button (click)="preview_move()" [disabled]="checking_move == 0" title="Movimiento Anterior" expand="block" color="secondary"><i class="fas fa-angle-left"></i></ion-button>
+                </ion-col>
+                <ion-col size="2">
+                  <ion-button (click)="rotate_board()" expand="block" title="Rotar Tablero" color="medium"><i class="fas fa-sync"></i></ion-button>
+                </ion-col>
+                <ion-col size="5">
+                  <ion-button (click)="next_move()" [disabled]="checking_move == current_move" expand="block" title="Movimiento Siguiente" color="secondary"><i class="fas fa-angle-right"></i></ion-button>
+                </ion-col>
+              </ion-row>
+            </ion-item>
+          </ion-list>
+        </ion-col>
+      </ion-row>
     </ion-col>
   </ion-row>
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
