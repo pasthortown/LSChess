@@ -21,7 +21,7 @@ class CreateGamesTable extends Migration
           $table->dateTime('start_time')->nullable($value = true);
           $table->dateTime('end_time')->nullable($value = true);
           $table->longText('start_position')->nullable($value = true);
-          $table->string('start_move',10)->nullable($value = true);
+          $table->string('first_move',10)->nullable($value = true);
           $table->unsignedInteger('game_state_id');
           $table->foreign('game_state_id')->references('id')->on('game_states')->onDelete('cascade');
        });

@@ -3,7 +3,7 @@ export class Move {
    from: string;
    to: string;
    moment: Date;
-   nomenclature: string;
+   pgn: string;
    piece_moving: string;
    piece_moving_color: string;
 
@@ -11,7 +11,7 @@ export class Move {
       this.from = '';
       this.to = '';
       this.moment = new Date();
-      this.nomenclature = '';
+      this.pgn = '';
       this.piece_moving = '';
       this.piece_moving_color = '';
       this.id = 0;

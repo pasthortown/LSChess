@@ -48,7 +48,7 @@ class GameController extends Controller
           $game->start_time = $result['start_time'];
           $game->end_time = $result['end_time'];
           $game->start_position = $result['start_position'];
-          $game->start_move = $result['start_move'];
+          $game->first_move = $result['first_move'];
           $game->game_state_id = $result['game_state_id'];
           $game->save();
           $moves_on_game = $result['moves_on_game'];
@@ -73,7 +73,7 @@ class GameController extends Controller
              'start_time'=>$result['start_time'],
              'end_time'=>$result['end_time'],
              'start_position'=>$result['start_position'],
-             'start_move'=>$result['start_move'],
+             'first_move'=>$result['first_move'],
              'game_state_id'=>$result['game_state_id'],
           ]);
           $game = Game::where('id',$result['id'])->first();
@@ -143,7 +143,7 @@ class GameController extends Controller
              'start_time'=>$result['start_time'],
              'end_time'=>$result['end_time'],
              'start_position'=>$result['start_position'],
-             'start_move'=>$result['start_move'],
+             'first_move'=>$result['first_move'],
              'game_state_id'=>$result['game_state_id'],
            ]);
          } else {
@@ -154,7 +154,7 @@ class GameController extends Controller
           $game->start_time = $result['start_time'];
           $game->end_time = $result['end_time'];
           $game->start_position = $result['start_position'];
-          $game->start_move = $result['start_move'];
+          $game->first_move = $result['first_move'];
           $game->game_state_id = $result['game_state_id'];
           $game->save();
          }

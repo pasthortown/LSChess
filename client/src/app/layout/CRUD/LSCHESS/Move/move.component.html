@@ -34,7 +34,7 @@
                <th>from</th>
                <th>to</th>
                <th>moment</th>
-               <th>nomenclature</th>
+               <th>pgn</th>
             </tr>
          </thead>
          <tbody>
@@ -43,7 +43,7 @@
                <td>{{move.from}}</td>
                <td>{{move.to}}</td>
                <td>{{move.moment}}</td>
-               <td>{{move.nomenclature}}</td>
+               <td>{{move.pgn}}</td>
             </tr>
          </tbody>
       </table>
@@ -99,9 +99,9 @@
                </div>
             </div>
             <div class="form-group row">
-               <label for="nomenclature" class="col-4 col-form-label">nomenclature</label>
+               <label for="pgn" class="col-4 col-form-label">pgn</label>
                <div class="col-8">
-                  <input type="text" class="form-control" id="nomenclature" name="nomenclature" placeholder="nomenclature" [(ngModel)]="moveSelected.nomenclature">
+                  <ck-editor id="pgn" name="pgn" skin="moono-lisa" [(ngModel)]="moveSelected.pgn"></ck-editor>
                </div>
             </div>
          </div>

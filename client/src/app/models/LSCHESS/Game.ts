@@ -7,7 +7,7 @@ export class Game {
    start_time: Date;
    end_time: Date;
    start_position: String;
-   start_move: String;
+   first_move: String;
    game_state_id: number;
    moves_on_game: Move[];
    constructor() {

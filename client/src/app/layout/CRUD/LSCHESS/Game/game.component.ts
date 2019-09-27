@@ -128,9 +128,9 @@ export class GameComponent implements OnInit {
    toCSV() {
       this.gameDataService.get().then( r => {
          const backupData = r as Game[];
-         let output = 'id;id_player_white;id_player_black;start_time;end_time;start_position;start_move;game_state_id\n';
+         let output = 'id;id_player_white;id_player_black;start_time;end_time;start_position;first_move;game_state_id\n';
          backupData.forEach(element => {
-            output += element.id; + element.id_player_white + ';' + element.id_player_black + ';' + element.start_time + ';' + element.end_time + ';' + element.start_position + ';' + element.start_move + ';' + element.game_state_id + '\n';
+            output += element.id; + element.id_player_white + ';' + element.id_player_black + ';' + element.start_time + ';' + element.end_time + ';' + element.start_position + ';' + element.first_move + ';' + element.game_state_id + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();

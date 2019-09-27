@@ -8,7 +8,7 @@ import { ProfilePicture } from './../../models/profile/ProfilePicture';
 })
 export class ProfilePictureService {
 
-   url = environment.api + 'profilepicture/';
+   url = environment.api_lschess + 'profilepicture/';
    options = new RequestOptions();
 
    constructor(private http: Http) {

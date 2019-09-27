@@ -1,3 +1,95 @@
-<p>
-    main works!
-</p>
+<input
+type="file"
+#cargarPartidaInput
+[hidden]="true"
+accept=".json"
+name="files[]"
+(change)="cargarPartida($event)"
+/>
+<div class="row">
+    <div class="col-12">
+        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="btn-group mr-2" role="group" aria-label="First group">
+                <strong>Juegan:</strong>&nbsp;<i class="fas fa-square white-turn" *ngIf="get_turn()=='white'"></i><i class="fas fa-square black-turn" *ngIf="get_turn()=='black'"></i>
+            </div>
+            <div class="btn-group mr-2" role="group" aria-label="Second group">
+                <label (click)="setTimeBlancas()"><strong>Blancas:</strong>&nbsp;{{tiempoBlancas}}</label>
+            </div>
+            <div class="btn-group mr-2" role="group" aria-label="Second group">
+                <label (click)="setTimeNegras()"><strong>Negras:</strong>&nbsp;{{tiempoNegras}}</label>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-6">
+        <table>
+            <tr *ngFor="let square_row of board.pieces; let row = index;">
+                <td class="border-row" *ngIf="board.white_side" style="font-size: 10px;">{{cordsY[row]}}</td>
+                <td class="border-row" *ngIf="!board.white_side" style="font-size: 10px;">{{cordsY[7-row]}}</td>
+                <td class="square"
+                *ngFor="let piece of square_row; let column = index;"
+                (click)="move(row, column)"
+                >
+                <span class="{{ piece.image }}"></span>
+                </td>
+            </tr>
+            <tr *ngIf="board.white_side">
+                <td></td>
+                <td *ngFor="let cordX of cordsX" class="border-column" style="font-size: 10px;">
+                {{cordX}}
+                </td>
+            </tr>
+            <tr *ngIf="!board.white_side">
+                <td></td>
+                <td *ngFor="let cordX of cordsXI" class="border-column" style="font-size: 10px;">
+                {{cordX}}
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="col-6">
+        <div class="row">
+            <div class="col-6">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                            <div class="btn-group mr-2" role="group" aria-label="First group">
+                                
+                                <button (click)="undo_move()" title="Deshacer Movimiento" class="btn btn-info"><i class="fas fa-arrow-left"></i></button>
+                                <button (click)="save_pgn()" title="Guardar Partida" class="btn btn-info"><i class="fas fa-save"></i></button>
+                                <button title="Cargar Partida" class="btn btn-info" (click)="cargarPartidaInput.click()"><i class="fas fa-folder-open"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12" [innerHTML]="get_PGN()" style="overflow-y: auto; overflow-x: hidden; height: 300px;">
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="row">
+                    <div class="col-12">
+                        <strong>Capturas:</strong>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        {{player_white}}&nbsp;<i *ngFor="let piece of board.captured_by_white" class="{{ piece.image }}" style="margin-left: 5px;"></i>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        {{player_black}}&nbsp;<i *ngFor="let piece of board.captured_by_black" class="{{ piece.image }}" style="margin-left: 5px;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <button (click)="preview_move()" [disabled]="checking_move == 0" title="Movimiento Anterior" class="btn btn-info col-4"><i class="fas fa-angle-left"></i></button>
+            <button (click)="rotate_board()" title="Rotar Tablero" class="btn btn-secondary col-3 ml-2 mr-2"><i class="fas fa-sync"></i></button>
+            <button (click)="next_move()" [disabled]="checking_move == current_move" title="Movimiento Siguiente" class="btn btn-info col-4"><i class="fas fa-angle-right"></i></button>
+        </div>
+    </div>
+</div>

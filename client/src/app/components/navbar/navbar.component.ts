@@ -1,6 +1,7 @@
 import { Router, NavigationEnd } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { ProfilePicture } from 'src/app/models/profile/ProfilePicture';
+import { environment } from './../../../environments/environment';
 
 @Component({
   selector: 'app-navbar',
@@ -11,7 +12,7 @@ export class NavbarComponent implements OnInit {
   public pushRightClass: string;
   user: any;
   profileImg = 'assets/images/accounts.png';
-
+  appName = environment.app_name;
   constructor(private router: Router) {
     this.router.events.subscribe(val => {
       if (

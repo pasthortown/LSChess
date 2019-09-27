@@ -19,7 +19,7 @@ class CreateMovesTable extends Migration
           $table->string('from',10)->nullable($value = true);
           $table->string('to',10)->nullable($value = true);
           $table->dateTime('moment')->nullable($value = true);
-          $table->string('nomenclature',10)->nullable($value = true);
+          $table->longText('pgn')->nullable($value = true);
        });
     }
 

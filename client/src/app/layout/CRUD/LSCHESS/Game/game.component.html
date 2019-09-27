@@ -36,7 +36,7 @@
                <th>start_time</th>
                <th>end_time</th>
                <th>start_position</th>
-               <th>start_move</th>
+               <th>first_move</th>
             </tr>
          </thead>
          <tbody>
@@ -47,7 +47,7 @@
                <td>{{game.start_time}}</td>
                <td>{{game.end_time}}</td>
                <td>{{game.start_position}}</td>
-               <td>{{game.start_move}}</td>
+               <td>{{game.first_move}}</td>
             </tr>
          </tbody>
       </table>
@@ -115,9 +115,9 @@
                </div>
             </div>
             <div class="form-group row">
-               <label for="start_move" class="col-4 col-form-label">start_move</label>
+               <label for="first_move" class="col-4 col-form-label">first_move</label>
                <div class="col-8">
-                  <input type="text" class="form-control" id="start_move" name="start_move" placeholder="startMove" [(ngModel)]="gameSelected.start_move">
+                  <input type="text" class="form-control" id="first_move" name="first_move" placeholder="firstMove" [(ngModel)]="gameSelected.first_move">
                </div>
             </div>
             <div class="form-group row">

@@ -44,7 +44,7 @@ class MoveController extends Controller
           $move->from = $result['from'];
           $move->to = $result['to'];
           $move->moment = $result['moment'];
-          $move->nomenclature = $result['nomenclature'];
+          $move->pgn = $result['pgn'];
           $move->save();
           DB::commit();
        } catch (Exception $e) {
@@ -62,7 +62,7 @@ class MoveController extends Controller
              'from'=>$result['from'],
              'to'=>$result['to'],
              'moment'=>$result['moment'],
-             'nomenclature'=>$result['nomenclature'],
+             'pgn'=>$result['pgn'],
           ]);
           DB::commit();
        } catch (Exception $e) {
@@ -102,7 +102,7 @@ class MoveController extends Controller
              'from'=>$result['from'],
              'to'=>$result['to'],
              'moment'=>$result['moment'],
-             'nomenclature'=>$result['nomenclature'],
+             'pgn'=>$result['pgn'],
            ]);
          } else {
           $move = new Move();
@@ -110,7 +110,7 @@ class MoveController extends Controller
           $move->from = $result['from'];
           $move->to = $result['to'];
           $move->moment = $result['moment'];
-          $move->nomenclature = $result['nomenclature'];
+          $move->pgn = $result['pgn'];
           $move->save();
          }
        }

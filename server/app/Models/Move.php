@@ -12,7 +12,7 @@ class Move extends Model
      * @var array
      */
     protected $fillable = [
-       'from','to','moment','nomenclature',
+       'from','to','moment','pgn',
     ];
 
     /**

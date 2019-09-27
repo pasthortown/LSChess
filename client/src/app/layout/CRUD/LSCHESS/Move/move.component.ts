@@ -85,9 +85,9 @@ export class MoveComponent implements OnInit {
    toCSV() {
       this.moveDataService.get().then( r => {
          const backupData = r as Move[];
-         let output = 'id;from;to;moment;nomenclature\n';
+         let output = 'id;from;to;moment;pgn\n';
          backupData.forEach(element => {
-            output += element.id; + element.from + ';' + element.to + ';' + element.moment + ';' + element.nomenclature + '\n';
+            output += element.id; + element.from + ';' + element.to + ';' + element.moment + ';' + element.pgn + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();
@@ -111,7 +111,7 @@ export class MoveComponent implements OnInit {
    }
 
    openDialog(content) {
-      this.modalService.open(content, { centered: true }).result.then(( response => {
+      this.modalService.open(content, { centered: true , size: 'lg' }).result.then(( response => {
          if ( response === 'Guardar click' ) {
             if (typeof this.moveSelected.id === 'undefined') {
                this.moveDataService.post(this.moveSelected).then( r => {

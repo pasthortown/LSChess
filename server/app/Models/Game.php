@@ -12,7 +12,7 @@ class Game extends Model
      * @var array
      */
     protected $fillable = [
-       'id_player_white','id_player_black','start_time','end_time','start_position','start_move',
+       'id_player_white','id_player_black','start_time','end_time','start_position','first_move',
     ];
 
     /**

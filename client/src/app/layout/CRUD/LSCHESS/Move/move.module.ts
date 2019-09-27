@@ -6,10 +6,12 @@ import { MoveRoutingModule } from './move-routing.module';
 import { MoveComponent } from './move.component';
 import { MoveService } from './../../../../services/CRUD/LSCHESS/move.service';
 import { environment } from 'src/environments/environment';
+import { CKEditorModule } from 'ngx-ckeditor';
 
 @NgModule({
    imports: [CommonModule,
              MoveRoutingModule,
+             CKEditorModule,
              FormsModule],
    declarations: [MoveComponent],
    providers: [
