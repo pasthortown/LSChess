@@ -7,6 +7,12 @@ export class Board {
     public captured_by_white: Piece[] = [];
     public captured_by_black: Piece[] = [];
     public white_side = true;
+    public piecesPromote: Piece[] = [
+        new Piece("r"),
+        new Piece("n"),
+        new Piece("b"),
+        new Piece("q")
+      ];
 
     constructor(startPosition: string, game_time?: number) {
         this.newPosition(startPosition);

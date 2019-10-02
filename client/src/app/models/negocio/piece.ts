@@ -1,5 +1,5 @@
 export class Piece {
-    name: string;
+    public name: string;
     color: string;
     value: number;
     image: string;
