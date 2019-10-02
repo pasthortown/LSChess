@@ -7,23 +7,27 @@ name="files[]"
 (change)="cargarPartida($event)"
 />
 <div class="row">
-    <div class="col-12">
-        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-            <div class="btn-group mr-2" role="group" aria-label="First group">
-                <strong>Juegan:</strong>&nbsp;<i class="fas fa-square white-turn" *ngIf="get_turn()=='white'"></i><i class="fas fa-square black-turn" *ngIf="get_turn()=='black'"></i>
-            </div>
-            <div class="btn-group mr-2" role="group" aria-label="Second group">
-                <label (click)="setTimeBlancas()"><strong>Blancas:</strong>&nbsp;{{tiempoBlancas}}</label>
-            </div>
-            <div class="btn-group mr-2" role="group" aria-label="Second group">
-                <label (click)="setTimeNegras()"><strong>Negras:</strong>&nbsp;{{tiempoNegras}}</label>
-            </div>
+    <div class="col-6">
+        <div class="historical">
+            <button (click)="preview_move()" [disabled]="checking_move == 0" title="Movimiento Anterior" class="btn btn-info col-4"><i class="fas fa-angle-left"></i></button>
+            <button (click)="rotate_board()" title="Rotar Tablero" class="btn btn-secondary col-3 ml-2 mr-2"><i class="fas fa-sync"></i></button>
+            <button (click)="next_move()" [disabled]="checking_move == current_move" title="Movimiento Siguiente" class="btn btn-info col-4"><i class="fas fa-angle-right"></i></button>
         </div>
+    </div>
+    <div class="col-6">
+        <table class="col-12">
+            <tr>
+                <th class="text-right"><label><strong>Juegan:</strong></label></th>
+                <td class="text-left"><label>&nbsp;<i class="fas fa-square white-turn" *ngIf="get_turn()=='white'"></i><i class="fas fa-square black-turn" *ngIf="get_turn()=='black'"></i></label></td>
+                <th class="text-center"><label (click)="setTimeBlancas()"><strong>Blancas:</strong>&nbsp;{{tiempoBlancas}}</label></th>
+                <th class="text-center"><label (click)="setTimeNegras()"><strong>Negras:</strong>&nbsp;{{tiempoNegras}}</label></th>
+            </tr>
+        </table>
     </div>
 </div>
 <div class="row">
     <div class="col-6">
-        <table>
+        <table class="tablero">
             <tr *ngFor="let square_row of board.pieces; let row = index;">
                 <td class="border-row" *ngIf="board.white_side" style="font-size: 10px;">{{cordsY[row]}}</td>
                 <td class="border-row" *ngIf="!board.white_side" style="font-size: 10px;">{{cordsY[7-row]}}</td>
@@ -86,11 +90,6 @@ name="files[]"
                 </div>
             </div>
         </div>
-        <div class="row">
-            <button (click)="preview_move()" [disabled]="checking_move == 0" title="Movimiento Anterior" class="btn btn-info col-4"><i class="fas fa-angle-left"></i></button>
-            <button (click)="rotate_board()" title="Rotar Tablero" class="btn btn-secondary col-3 ml-2 mr-2"><i class="fas fa-sync"></i></button>
-            <button (click)="next_move()" [disabled]="checking_move == current_move" title="Movimiento Siguiente" class="btn btn-info col-4"><i class="fas fa-angle-right"></i></button>
-        </div>
     </div>
 </div>
 
@@ -108,7 +107,7 @@ name="files[]"
         <tr>
           <td
             *ngFor="let piece of board.piecesPromote"
-            (click)="c(piece.name)"
+            (click)="c(piece.name)" class="square"
           >
             <span class="{{ piece.image }}"></span>
           </td>
@@ -116,7 +115,7 @@ name="files[]"
       </table>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-outline-danger" (click)="c('cancel')">
+      <button type="button" class="btn btn-outline-danger" (click)="d('Cross click')">
         Cancelar
       </button>
       <button type="button" class="btn btn-success" (click)="c('ok')">

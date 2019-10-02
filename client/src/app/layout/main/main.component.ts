@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { environment } from './../../../environments/environment';
 import { Board } from 'src/app/models/negocio/board';
 import * as Chess from 'chess.js';
@@ -6,6 +6,7 @@ import { Move } from 'src/app/models/LSCHESS/Move';
 import Swal from 'sweetalert2'
 import { saveAs } from 'file-saver/FileSaver';
 import { Cycle } from 'src/app/models/negocio/cycle';
+import { NgbModal, NgbModalOptions } from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
     selector: 'app-main',
@@ -13,6 +14,7 @@ import { Cycle } from 'src/app/models/negocio/cycle';
     styleUrls: ['./main.component.scss']
 })
 export class MainComponent implements OnInit {
+    @ViewChild("pawnPromotionModalDialog") pawnPromotionModalDialog;
     chess: Chess = new Chess();
     board: Board;
     player_white = 'Blancas';
@@ -33,7 +35,7 @@ export class MainComponent implements OnInit {
     sizeLeftPanel = 6;
     sizeRightPanel = 6;
 
-    constructor() {
+    constructor(private modalDialog: NgbModal) {
         this.board = new Board(this.chess.fen().split(' ')[0],5);
     }
 
@@ -242,35 +244,29 @@ export class MainComponent implements OnInit {
         this.refresh_board();
       }
     
-      /*async showPropotionMenu(from: string, to: string) {
-        let opts: PickerOptions = {
-          buttons: [
-            {
-              text: 'Seleccionar',
-              cssClass: 'special-done'
-            }
-          ],
-          columns: [
-            {
-              name: 'piece',
-              options: [
-                { text: 'Torre', value: 'r' },
-                { text: 'Caballo', value: 'n' },
-                { text: 'Alfil', value: 'b' },
-                { text: 'Dama', value: 'q' }
-              ]
-            }
-          ]
-        };
-        let picker = await this.pickerCtrl.create(opts);
-        picker.present();
-        picker.onDidDismiss().then(async data => {
-          const piece = await picker.getColumn('piece');
-          this.chess.move({ from: from, to: to, promotion: piece.options[piece.selectedIndex].value});
-          this.newMove = new Move();
-          this.refresh_board();
+      showPropotionMenu(from: string, to: string) {
+        this.board.piecesPromote.forEach(piece => {
+          piece.setColor(this.get_turn());
         });
-      }*/
+        this.modalDialog.open(this.pawnPromotionModalDialog, { centered: true }).result.then(
+          result => {
+            const pieces = {
+              rook: 'r',
+              knight: 'n',
+              bishop: 'b',
+              queen: 'q',
+              king: 'k',
+              pawn: 'p',
+            };
+            this.chess.move({ from: from, to: to, promotion: pieces[result]});
+            this.newMove = new Move();
+            this.refresh_board();
+        }, cancel => {
+            this.chess.move({ from: from, to: to, promotion: 'q'});
+            this.newMove = new Move();
+            this.refresh_board();
+        });
+      }
     
       play_pc() {
         const gameOver = this.chess.game_over();
@@ -339,7 +335,7 @@ export class MainComponent implements OnInit {
             return;
           }
           if (( row == 0 || row == 7 ) && this.newMove.piece_moving == 'p') {
-            //this.showPropotionMenu(this.newMove.from, this.newMove.to);
+            this.showPropotionMenu(this.newMove.from, this.newMove.to);
           } else {
             this.chess.move({ from: this.newMove.from, to: this.newMove.to });
             this.refresh_board();

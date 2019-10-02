@@ -59,6 +59,11 @@ export class Piece {
         this.refresh();
     }
 
+    setColor(color: string) {
+        this.color = color;
+        this.refresh();
+    }
+
     public refresh() {
         if (this.name !== '') {
             this.image = this.color + ' fas fa-chess-' + this.name;

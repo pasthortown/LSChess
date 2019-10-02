@@ -1,4 +1,4 @@
-  table {
+  .tablero {
     margin: 5px auto;
     border-style: solid;
     border-color: #29293d;
@@ -6,6 +6,36 @@
     background: #666699;
   }
   
+  .tablero tr:nth-child(odd) td:nth-child(even),
+  .tablero tr:nth-child(even) td:nth-child(odd) {
+    background: #f0f0f5;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #f0f0f5;
+  }
+  
+  .tablero td:hover {
+    background-color: rgba(95, 202, 74, 0.8);
+    border-style: solid;
+    border-width: 1px;
+    border-color: greenyellow;
+  }
+  
+  .tablero tr:nth-child(odd):hover td:nth-child(even):hover,
+  .tablero tr:nth-child(even):hover td:nth-child(odd):hover {
+    background-color: rgba(95, 202, 74, 0.8);
+    border-style: solid;
+    border-width: 1px;
+    border-color: greenyellow;
+  }
+  
+  .tablero td {
+    text-align: center;
+    border-style: solid;
+    border-width: 2px;
+    border-color: #666699;
+  }
+
   .white-turn {
     color: white;
     text-shadow: -1px 0 black, 0 2px black, 2px 0 black, 0 -1px black;
@@ -16,42 +46,17 @@
     text-shadow: -1px 0 black, 0 2px black, 2px 0 black, 0 -1px black;
   }
   
-  td {
-    text-align: center;
-    border-style: solid;
-    border-width: 2px;
-    border-color: #666699;
-  }
-  
   .square {
     width: 9vh;
     height: 9vh;
     font-size: 5vh;
   }
 
-  tr:nth-child(odd) td:nth-child(even),
-  tr:nth-child(even) td:nth-child(odd) {
-    background: #f0f0f5;
-    border-style: solid;
-    border-width: 1px;
-    border-color: #f0f0f5;
+  .historical {
+    width: 72vh;
+    margin: auto;
   }
-  
-  td:hover {
-    background-color: rgba(95, 202, 74, 0.8);
-    border-style: solid;
-    border-width: 1px;
-    border-color: greenyellow;
-  }
-  
-  tr:nth-child(odd):hover td:nth-child(even):hover,
-  tr:nth-child(even):hover td:nth-child(odd):hover {
-    background-color: rgba(95, 202, 74, 0.8);
-    border-style: solid;
-    border-width: 1px;
-    border-color: greenyellow;
-  }
-  
+
   .border-column {
     height: 20px;
     font-size: 14px;
