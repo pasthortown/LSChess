@@ -12,7 +12,21 @@ export class Board {
         new Piece("n"),
         new Piece("b"),
         new Piece("q")
-      ];
+    ];
+    public buildingPieces: any[] = [
+        [new Piece("r", "white"),
+        new Piece("n", "white"),
+        new Piece("b", "white"),
+        new Piece("q", "white"),
+        new Piece("k", "white"),
+        new Piece("p", "white")],
+        [new Piece("r", "black"),
+        new Piece("n", "black"),
+        new Piece("b", "black"),
+        new Piece("q", "black"),
+        new Piece("k", "black"),
+        new Piece("p", "black")]
+    ];
 
     constructor(startPosition: string, game_time?: number) {
         this.newPosition(startPosition);
@@ -139,8 +153,11 @@ export class Board {
             };
         }
         possibleMoves.forEach(possibleMove => {
+            const columnFrom = coordsX[possibleMove.from.substr(0,1)];
+            const rowFrom = coordsY[possibleMove.from.substr(1,1)];
             const column = coordsX[possibleMove.to.substr(0,1)];
             const row = coordsY[possibleMove.to.substr(1,1)];
+            this.pieces[rowFrom][columnFrom] = new Piece(piece, 'selected');
             if (typeof(possibleMove.captured) == 'undefined') {
                 this.pieces[row][column] = new Piece(piece, 'shadow');
             } else {

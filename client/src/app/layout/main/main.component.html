@@ -59,7 +59,6 @@ name="files[]"
                     <div class="col-12">
                         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
                             <div class="btn-group mr-2" role="group" aria-label="First group">
-                                
                                 <button (click)="undo_move()" title="Deshacer Movimiento" class="btn btn-info"><i class="fas fa-arrow-left"></i></button>
                                 <button (click)="save_pgn()" title="Guardar Partida" class="btn btn-info"><i class="fas fa-save"></i></button>
                                 <button title="Cargar Partida" class="btn btn-info" (click)="cargarPartidaInput.click()"><i class="fas fa-folder-open"></i></button>
@@ -67,7 +66,7 @@ name="files[]"
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row mt-3">
                     <div class="col-12" [innerHTML]="get_PGN()" style="overflow-y: auto; overflow-x: hidden; height: 300px;">
                     </div>
                 </div>
@@ -78,16 +77,30 @@ name="files[]"
                         <strong>Capturas:</strong>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row mt-3">
                     <div class="col-12">
                         {{player_white}}&nbsp;<i *ngFor="let piece of board.captured_by_white" class="{{ piece.image }}" style="margin-left: 5px;"></i>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row mt-2">
                     <div class="col-12">
                         {{player_black}}&nbsp;<i *ngFor="let piece of board.captured_by_black" class="{{ piece.image }}" style="margin-left: 5px;"></i>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-12">
+                <table class="tablero">
+                    <tr *ngFor="let row_square of board.buildingPieces; let row = index;">
+                        <td class="square"
+                        *ngFor="let piece of row_square; let column = index;"
+                        (click)="move(row, column)"
+                        >
+                        <span class="{{ piece.image }}"></span>
+                        </td>
+                    </tr>
+                </table>
             </div>
         </div>
     </div>
