@@ -19,12 +19,18 @@ export class MainComponent implements OnInit {
     board: Board;
     player_white = 'Blancas';
     player_black = 'Negras';
+    next_turn = 'white';
+    white_can_queen_castling = true;
+    white_can_king_castling = true;
+    black_can_queen_castling = true;
+    black_can_king_castling = true;
     newMove: Move = new Move();
     cordsX = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
     cordsXI = ['h', 'g', 'f', 'e', 'd', 'c', 'b', 'a'];
     cordsY = ['8', '7', '6', '5', '4', '3', '2', '1'];
     tiempoNegras = '10:00';
     tiempoBlancas = '10:00';
+    editarPosicion = false;
     current_position = '';
     timeNegras = 600;
     timeBlancas = 600;
@@ -59,7 +65,39 @@ export class MainComponent implements OnInit {
           };
         }
       }
-    
+
+      white_king_castling() {
+        if (this.white_can_king_castling) {
+          this.white_can_king_castling = false;
+        } else {
+          this.white_can_king_castling = true;
+        }
+      }
+
+      white_queen_castling() {
+        if (this.white_can_queen_castling) {
+          this.white_can_queen_castling = false;
+        } else {
+          this.white_can_queen_castling = true;
+        }
+      }
+
+      black_king_castling() {
+        if (this.black_can_king_castling) {
+          this.black_can_king_castling = false;
+        } else {
+          this.black_can_king_castling = true;
+        }
+      }
+
+      black_queen_castling() {
+        if (this.black_can_queen_castling) {
+          this.black_can_queen_castling = false;
+        } else {
+          this.black_can_queen_castling = true;
+        }
+      }
+
       load_PGN(pgn: string) {
         this.chess.load_pgn(pgn);
         this.refresh_board();
@@ -116,7 +154,34 @@ export class MainComponent implements OnInit {
           this.board.check(this.get_turn());
         }
       }
-    
+
+      cleanBoard() {
+        this.board.newPosition('8/8/8/8/8/8/8/8');
+      }
+
+      resetBoard(){
+        //this.set_position('rn1qkb1r/ppp1pppp/5n2/3p2B1/3P2b1/2N5/PPP1PPPP/R2QKBNR', 'w');
+        this.board.newPosition('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR');
+      }
+
+      set_next_turn() {
+        if (this.next_turn == 'white') {
+          this.next_turn = 'black';
+        } else {
+          this.next_turn = 'white';
+        }
+      }
+
+      finishSetPosition() {
+        this.editarPosicion = false;
+        this.set_position(this.board.get_fen());
+      }
+
+      cancelSetPosition() {
+        this.editarPosicion = false;
+        this.refresh_board();
+      }
+
       next_move() {
         const cycles: Cycle[] = this.PGN2Cycles(this.current_position);
         this.checking_move = this.checking_move + 1;
@@ -164,12 +229,12 @@ export class MainComponent implements OnInit {
           return;
         }
         if (this.get_turn() == 'white') {
-          if (this.current_move == this.checking_move) {
+          if ((this.current_move == this.checking_move) && !this.editarPosicion) {
             this.timeBlancas = this.timeBlancas - 1;
           }
           this.refreshClock() 
         } else {
-          if (this.current_move == this.checking_move) { 
+          if ((this.current_move == this.checking_move) && !this.editarPosicion) { 
             this.timeNegras = this.timeNegras - 1;
           }
           this.refreshClock()
@@ -278,6 +343,10 @@ export class MainComponent implements OnInit {
         }
       }
     
+      establecerPosicion() {
+        this.editarPosicion = true;
+      }
+
       refresh_board() {
         this.board.newPosition(this.chess.fen().split(' ')[0]);
         this.current_position = this.chess.pgn({ max_width: 5, newline_char: '\n' });
@@ -428,8 +497,30 @@ export class MainComponent implements OnInit {
       }
     
       set_position(position: string) {
-        const newPosition = '4r3/8/2p2PPk/1p6/pP2p1R1/P1B5/2P2K2/3r4 w - - 1 45';
-        this.chess.load(newPosition);
+        let castlings = '';
+        let turn = 'b';
+        if (this.white_can_king_castling) {
+          castlings += 'K';
+        }
+        if (this.white_can_queen_castling) {
+          castlings += 'Q';
+        }
+        if (this.black_can_king_castling) {
+          castlings += 'k';
+        }
+        if (this.black_can_queen_castling) {
+          castlings += 'q';
+        }
+        if (castlings == '') {
+          castlings = '-';
+        }
+        if (this.next_turn == 'white') {
+          turn = 'w';
+        }
+        const newPosition = position + ' ' + turn + ' ' + castlings + ' - 0 1';
+        if ((position.search('k') > -1) && (position.search('K') > -1)) {
+          this.chess.load(newPosition);
+        }
         this.refresh_board();
       }
     

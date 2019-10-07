@@ -45,6 +45,23 @@ export class Piece {
         }
     }
 
+    public get_symbol() {
+        const symbols = {
+            rook: 'r',
+            knight: 'n',
+            bishop: 'b',
+            queen: 'q',
+            king: 'k',
+            pawn: 'p',
+            '': 'empty',
+        };
+        const symbol = symbols[this.name];
+        if ( this.color == 'white') {
+            return symbol.toUpperCase();
+        }
+        return symbol;
+    }
+
     public set(name: string, color: string) {
         this.name = name;
         this.color = color;

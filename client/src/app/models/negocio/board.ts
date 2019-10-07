@@ -70,6 +70,30 @@ export class Board {
         return /^\d+$/.test(str);
     }
 
+    get_fen() {
+        let toReturn = '';
+        this.pieces.forEach(row => {
+            let empty_count = 0;
+            row.forEach(piece => {
+                const symbol = piece.get_symbol();
+                if (symbol == 'empty') {
+                    empty_count++;
+                } else {
+                    if (empty_count > 0) {
+                        toReturn += empty_count.toString();
+                        empty_count = 0;    
+                    }
+                    toReturn += symbol;
+                }
+            });
+            if (empty_count > 0) {
+                toReturn += empty_count.toString();    
+            }
+            toReturn+='/';
+        });
+        return toReturn.substring(0, toReturn.length - 1);
+    }
+
     drawBoard() {
         this.pieces = [];
         this.captured_by_black = [];

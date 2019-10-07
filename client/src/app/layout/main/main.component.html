@@ -17,6 +17,15 @@ name="files[]"
     <div class="col-6">
         <table class="col-12">
             <tr>
+                <td>
+                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                        <div class="btn-group" role="group" aria-label="First group">
+                            <button title="Nueva - P vs P" class="btn btn-dark"><i class="fas fa-user"></i><i class="fas fa-user"></i></button>
+                            <button title="Nueva - IA vs P" class="btn btn-default"><i class="fas fa-robot"></i><i class="fas fa-user"></i></button>
+                            <button title="Nueva - IA vs IA" class="btn btn-default"><i class="fas fa-robot"></i><i class="fas fa-robot"></i></button>
+                        </div>
+                    </div>
+                </td>
                 <th class="text-right"><label><strong>Juegan:</strong></label></th>
                 <td class="text-left"><label>&nbsp;<i class="fas fa-square white-turn" *ngIf="get_turn()=='white'"></i><i class="fas fa-square black-turn" *ngIf="get_turn()=='black'"></i></label></td>
                 <th class="text-center"><label (click)="setTimeBlancas()"><strong>Blancas:</strong>&nbsp;{{tiempoBlancas}}</label></th>
@@ -53,7 +62,7 @@ name="files[]"
         </table>
     </div>
     <div class="col-6">
-        <div class="row">
+        <div class="row mt-2">
             <div class="col-6">
                 <div class="row">
                     <div class="col-12">
@@ -63,19 +72,14 @@ name="files[]"
                                 <button (click)="save_pgn()" title="Guardar Partida" class="btn btn-info"><i class="fas fa-save"></i></button>
                                 <button title="Cargar Partida" class="btn btn-info" (click)="cargarPartidaInput.click()"><i class="fas fa-folder-open"></i></button>
                             </div>
-                            <div class="btn-group mr-2" role="group" aria-label="First group">
-                                <button title="Establecer Posición" class="btn btn-info"><i class="fas fa-tools"></i></button>
-                            </div>
-                            <div class="btn-group mr-2" role="group" aria-label="First group">
-                                <button title="Nueva - P vs P" class="btn btn-dark"><i class="fas fa-user"></i><i class="fas fa-user"></i></button>
-                                <button title="Nueva - IA vs P" class="btn btn-default"><i class="fas fa-robot"></i><i class="fas fa-user"></i></button>
-                                <button title="Nueva - IA vs IA" class="btn btn-default"><i class="fas fa-robot"></i><i class="fas fa-robot"></i></button>
-                            </div>
+                            <div class="btn-group" role="group" aria-label="First group">
+                                <button title="Establecer Posición" class="btn btn-info" (click)="establecerPosicion()"><i class="fas fa-tools"></i></button>
+                            </div>    
                         </div>
                     </div>
                 </div>
                 <div class="row mt-3">
-                    <div class="col-12" [innerHTML]="get_PGN()" style="overflow-y: auto; overflow-x: hidden; height: 300px;">
+                    <div class="col-12" [innerHTML]="get_PGN()" style="overflow-y: auto; overflow-x: hidden; height: 200px;">
                     </div>
                 </div>
             </div>
@@ -97,7 +101,7 @@ name="files[]"
                 </div>
             </div>
         </div>
-        <div class="row mt-3">
+        <div class="row mt-3" *ngIf="editarPosicion">
             <div class="col-12">
                 <table class="tablero">
                     <tr *ngFor="let row_square of board.buildingPieces; let row = index;">
@@ -107,6 +111,30 @@ name="files[]"
                         >
                         <span class="{{ piece.image }}"></span>
                         </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-12 text-center">
+                <table style="width: 54vh; margin: auto;">
+                    <tr>
+                        <th class="text-right"><label><strong>Juegan:</strong></label></th>
+                        <td class="text-left"><label>&nbsp;<i class="fas fa-square white-turn" (click)="set_next_turn()" *ngIf="next_turn=='white'"></i><i class="fas fa-square black-turn" (click)="set_next_turn()" *ngIf="next_turn=='black'"></i></label></td>        
+                        <td>
+                            <button title="Limpiar Tablero" (click)="cleanBoard()" class="btn btn-default mr-2"><i class="fas fa-eraser"></i><i class="fas fa-chess-board"></i></button>
+                            <button title="Reiniciar Posición" (click)="resetBoard()" class="btn btn-default mr-2"><i class="fas fa-sync"></i><i class="fas fa-chess-board"></i></button>
+                            <button title="Aceptar" (click)="finishSetPosition()" class="btn btn-success mr-2"><i class="fas fa-check-circle"></i></button>
+                            <button title="Cancelar" (click)="cancelSetPosition()" class="btn btn-danger"><i class="fas fa-times-circle"></i></button>
+                        </td>
+                    </tr>
+                </table>
+                <table class="mt-2" style="width: 54vh; margin: auto;">
+                    <tr>
+                        <th class="text-right"><label><strong>Enroques Blancas:</strong></label></th>
+                        <td class="text-left">&nbsp;<label (click)="white_queen_castling()" *ngIf="white_can_queen_castling" style="color: lime"><i class="fas fa-chess-queen"></i></label><label (click)="white_queen_castling()" *ngIf="!white_can_queen_castling" style="color: red;"><i class="fas fa-chess-queen"></i></label>&nbsp;<label (click)="white_king_castling()" *ngIf="white_can_king_castling" style="color: lime"><i class="fas fa-chess-king"></i></label><label (click)="white_king_castling()" *ngIf="!white_can_king_castling" style="color: red;"><i class="fas fa-chess-king"></i></label></td>
+                    </tr>
+                    <tr>
+                        <th class="text-right"><label><strong>Enroques Negras:</strong></label></th>
+                        <td class="text-left">&nbsp;<label (click)="black_queen_castling()" *ngIf="black_can_queen_castling" style="color: lime"><i class="fas fa-chess-queen"></i></label><label (click)="black_queen_castling()" *ngIf="!black_can_queen_castling" style="color: red;"><i class="fas fa-chess-queen"></i></label>&nbsp;<label (click)="black_king_castling()" *ngIf="black_can_king_castling" style="color: lime"><i class="fas fa-chess-king"></i></label><label (click)="black_king_castling()" *ngIf="!black_can_king_castling" style="color: red;"><i class="fas fa-chess-king"></i></label></td>
                     </tr>
                 </table>
             </div>
