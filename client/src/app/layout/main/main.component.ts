@@ -7,6 +7,7 @@ import Swal from 'sweetalert2'
 import { saveAs } from 'file-saver/FileSaver';
 import { Cycle } from 'src/app/models/negocio/cycle';
 import { NgbModal, NgbModalOptions } from "@ng-bootstrap/ng-bootstrap";
+import { Piece } from 'src/app/models/negocio/piece';
 
 @Component({
     selector: 'app-main',
@@ -40,6 +41,8 @@ export class MainComponent implements OnInit {
     checking_move = 0;
     sizeLeftPanel = 6;
     sizeRightPanel = 6;
+    editing_from = {row: null, colum: null};
+    addingPiece = new Piece('');
 
     constructor(private modalDialog: NgbModal) {
         this.board = new Board(this.chess.fen().split(' ')[0],5);
@@ -72,6 +75,15 @@ export class MainComponent implements OnInit {
         } else {
           this.white_can_king_castling = true;
         }
+      }
+
+      selectBuildingPiece(row: number, colum: number) {
+        if (this.editing_from.row != null) {
+          this.board.drawBoard();
+        }
+        this.editing_from.colum = null;
+        this.editing_from.row = null;
+        this.addingPiece = this.board.selectAddingPiece(row, colum);
       }
 
       white_queen_castling() {
@@ -157,11 +169,12 @@ export class MainComponent implements OnInit {
 
       cleanBoard() {
         this.board.newPosition('8/8/8/8/8/8/8/8');
+        this.board.disableMaxCounts();
       }
 
       resetBoard(){
-        //this.set_position('rn1qkb1r/ppp1pppp/5n2/3p2B1/3P2b1/2N5/PPP1PPPP/R2QKBNR', 'w');
         this.board.newPosition('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR');
+        this.board.disableMaxCounts();
       }
 
       set_next_turn() {
@@ -344,6 +357,7 @@ export class MainComponent implements OnInit {
       }
     
       establecerPosicion() {
+        this.board.disableMaxCounts();
         this.editarPosicion = true;
       }
 
@@ -363,54 +377,85 @@ export class MainComponent implements OnInit {
           row = 7-row_selected;
           column = 7-column_selected;
         }
-        if (this.current_move !== this.checking_move) {
-          return;
-        }
-        if (this.chess.game_over() || this.timeBlancas == 0 || this.timeNegras == 0) {
-          this.time_running = false;
-          return;
-        }
-        if (!this.time_running) {
-          this.time_running = true;
-          this.reloj();
-        }
-        const square_piece = this.get_square_piece(row,column); 
-        if (square_piece.piece == '' && this.newMove.from == '') {
-          return;
-        }
-        if (this.get_turn() !== square_piece.color && this.newMove.from == '') {
-          return;
-        }
-        if (this.newMove.from == '' || this.get_turn() == square_piece.color) {
-          const piece_square = this.get_square_piece(row, column);
-          this.newMove.from = this.cordsX[column] + this.cordsY[row];  
-          this.newMove.piece_moving = piece_square.piece;
-          this.newMove.piece_moving_color = piece_square.color;
-          this.board.drawPossibleMoves(this.get_possible_moves(this.newMove.from), square_piece.piece);
-        } else {
-          this.newMove.to = this.cordsX[column] + this.cordsY[row];
-          const possibleMoves = this.get_possible_moves(this.newMove.from);
-          let continueMoving = false;
-          possibleMoves.forEach(possibleMove => {
-            if (possibleMove.to == this.newMove.to) {
-              continueMoving = true;
+        if (this.editarPosicion) {
+          if (this.addingPiece.get_symbol() !== 'empty') {
+            this.board.position[row][column] = this.addingPiece.get_symbol();
+            this.addingPiece = new Piece('');
+            this.board.drawBoard();
+            this.board.unselectBuildingPiece();
+            this.board.disableMaxCounts();
+          } else {
+            if (this.board.position[row][column] == '' && this.editing_from.row == null) {
+              return;
             }
-          });
-          if (!continueMoving) {
-            this.refresh_board();
-            this.newMove = new Move();
-            this.current_move++;
-            this.checking_move = this.current_move;
+            if (this.editing_from.row == null) {
+              this.editing_from.row = row;
+              this.editing_from.colum = column;
+              this.board.disableMaxCounts();
+              this.board.selectPiece(row_selected, column_selected);
+            } else {
+              if ((this.editing_from.row == row) && (this.editing_from.colum == column)) {
+                this.board.position[row][column] = '';
+              } else {
+                this.board.position[row][column] = this.board.position[this.editing_from.row][this.editing_from.colum];
+                this.board.position[this.editing_from.row][this.editing_from.colum] = '';
+              }
+              this.board.disableMaxCounts();
+              this.board.drawBoard();
+              this.editing_from.row = null;
+              this.editing_from.colum = null;
+            }
+          }
+        } else {
+          if (this.current_move !== this.checking_move) {
             return;
           }
-          if (( row == 0 || row == 7 ) && this.newMove.piece_moving == 'p') {
-            this.showPropotionMenu(this.newMove.from, this.newMove.to);
+          if (this.chess.game_over() || this.timeBlancas == 0 || this.timeNegras == 0) {
+            this.time_running = false;
+            return;
+          }
+          if (!this.time_running) {
+            this.time_running = true;
+            this.reloj();
+          }
+          const square_piece = this.get_square_piece(row,column); 
+          if (square_piece.piece == '' && this.newMove.from == '') {
+            return;
+          }
+          if (this.get_turn() !== square_piece.color && this.newMove.from == '') {
+            return;
+          }
+          if (this.newMove.from == '' || this.get_turn() == square_piece.color) {
+            const piece_square = this.get_square_piece(row, column);
+            this.newMove.from = this.cordsX[column] + this.cordsY[row];  
+            this.newMove.piece_moving = piece_square.piece;
+            this.newMove.piece_moving_color = piece_square.color;
+            this.board.drawPossibleMoves(this.get_possible_moves(this.newMove.from), square_piece.piece);
           } else {
-            this.chess.move({ from: this.newMove.from, to: this.newMove.to });
-            this.refresh_board();
-            this.newMove = new Move();
-            this.current_move++;
-            this.checking_move = this.current_move;
+            this.newMove.to = this.cordsX[column] + this.cordsY[row];
+            const possibleMoves = this.get_possible_moves(this.newMove.from);
+            let continueMoving = false;
+            possibleMoves.forEach(possibleMove => {
+              if (possibleMove.to == this.newMove.to) {
+                continueMoving = true;
+              }
+            });
+            if (!continueMoving) {
+              this.refresh_board();
+              this.newMove = new Move();
+              this.current_move++;
+              this.checking_move = this.current_move;
+              return;
+            }
+            if (( row == 0 || row == 7 ) && this.newMove.piece_moving == 'p') {
+              this.showPropotionMenu(this.newMove.from, this.newMove.to);
+            } else {
+              this.chess.move({ from: this.newMove.from, to: this.newMove.to });
+              this.refresh_board();
+              this.newMove = new Move();
+              this.current_move++;
+              this.checking_move = this.current_move;
+            }
           }
         }
       }

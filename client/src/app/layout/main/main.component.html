@@ -107,7 +107,7 @@ name="files[]"
                     <tr *ngFor="let row_square of board.buildingPieces; let row = index;">
                         <td class="square"
                         *ngFor="let piece of row_square; let column = index;"
-                        (click)="move(row, column)"
+                        (click)="selectBuildingPiece(row, column)"
                         >
                         <span class="{{ piece.image }}"></span>
                         </td>

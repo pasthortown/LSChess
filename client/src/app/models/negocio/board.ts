@@ -72,11 +72,10 @@ export class Board {
 
     get_fen() {
         let toReturn = '';
-        this.pieces.forEach(row => {
+        this.position.forEach(row => {
             let empty_count = 0;
-            row.forEach(piece => {
-                const symbol = piece.get_symbol();
-                if (symbol == 'empty') {
+            row.forEach(symbol => {
+                if (symbol == '') {
                     empty_count++;
                 } else {
                     if (empty_count > 0) {
@@ -124,6 +123,51 @@ export class Board {
                 this.captured_by_black.push(new Piece(elementWhite, 'white'));
             }
         });
+    }
+
+    unselectBuildingPiece() {
+        this.buildingPieces[0].forEach(piece => {
+            piece.setColor('white');
+        });
+        this.buildingPieces[1].forEach(piece => {
+            piece.setColor('black');
+        });
+    }
+
+    selectPiece(row: number, column: number) {
+        this.pieces[row][column].setColor('selected');
+    }
+
+    disableMaxCounts() {
+        this.unselectBuildingPiece();
+        this.buildingPieces.forEach(row => {
+            row.forEach(piece => {
+                const checkingSymbol = piece.get_symbol();
+                const checkingMaxCount = piece.get_max_count();
+                let currentCount = 0;
+                this.position.forEach(position_row => {
+                    position_row.forEach(position_value => {
+                        if (position_value == checkingSymbol) {
+                            currentCount++;
+                        }   
+                    });
+                });
+                if (currentCount == checkingMaxCount) {
+                    piece.setColor('disabled');
+                }
+            });
+        });
+    }
+
+    selectAddingPiece(row:number, column: number) {
+        this.unselectBuildingPiece();
+        this.disableMaxCounts();
+        if (this.buildingPieces[row][column].get_color() == 'disabled') {
+            return new Piece('');
+        }
+        let toReturn = new Piece(this.buildingPieces[row][column].get_symbol(), this.buildingPieces[row][column].get_color()); 
+        this.buildingPieces[row][column].setColor('selected');
+        return toReturn;
     }
 
     check(turn: string) {

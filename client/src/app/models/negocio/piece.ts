@@ -45,6 +45,10 @@ export class Piece {
         }
     }
 
+    public get_max_count() {
+        return this.max_count;
+    }
+
     public get_symbol() {
         const symbols = {
             rook: 'r',
@@ -60,6 +64,10 @@ export class Piece {
             return symbol.toUpperCase();
         }
         return symbol;
+    }
+
+    public get_color() {
+        return this.color;
     }
 
     public set(name: string, color: string) {
