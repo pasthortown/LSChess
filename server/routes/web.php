@@ -56,6 +56,7 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    $router->get('/bestmove', ['uses' => 'BestMoveController@get']);
    $router->get('/bestmove/paginate', ['uses' => 'BestMoveController@paginate']);
    $router->get('/bestmove/backup', ['uses' => 'BestMoveController@backup']);
+   $router->post('/bestmove/find', ['uses' => 'BestMoveController@find']);
    $router->put('/bestmove', ['uses' => 'BestMoveController@put']);
    $router->delete('/bestmove', ['uses' => 'BestMoveController@delete']);
    $router->post('/bestmove/masive_load', ['uses' => 'BestMoveController@masiveLoad']);

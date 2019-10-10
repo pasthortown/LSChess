@@ -8,6 +8,8 @@ import { saveAs } from 'file-saver/FileSaver';
 import { Cycle } from 'src/app/models/negocio/cycle';
 import { NgbModal, NgbModalOptions } from "@ng-bootstrap/ng-bootstrap";
 import { Piece } from 'src/app/models/negocio/piece';
+import { BestMoveService } from 'src/app/services/CRUD/LSCHESS/bestmove.service';
+import { BestMove } from 'src/app/models/LSCHESS/BestMove';
 
 @Component({
     selector: 'app-main',
@@ -33,18 +35,21 @@ export class MainComponent implements OnInit {
     tiempoBlancas = '10:00';
     editarPosicion = false;
     current_position = '';
+    learning = false;
     timeNegras = 600;
     timeBlancas = 600;
     time_running = false;
     user = '';
     current_move = 0;
     checking_move = 0;
+    value_of_position = {white_position: 0, black_position: 0, white_pieces: 0, black_pieces: 0, white_movility: 0, black_movility: 0};
     sizeLeftPanel = 6;
     sizeRightPanel = 6;
     editing_from = {row: null, colum: null};
     addingPiece = new Piece('');
+    new_best_move = new BestMove();
 
-    constructor(private modalDialog: NgbModal) {
+    constructor(private modalDialog: NgbModal, private bestMoveDataService: BestMoveService) {
         this.board = new Board(this.chess.fen().split(' ')[0],5);
     }
 
@@ -86,6 +91,48 @@ export class MainComponent implements OnInit {
         this.addingPiece = this.board.selectAddingPiece(row, colum);
       }
 
+      evaluateBoard(turn) {
+        if (turn == 'white') {
+          this.value_of_position.white_pieces = 0;
+          this.value_of_position.white_movility = 0;
+          this.value_of_position.white_position = 0;
+        } else {
+          this.value_of_position.black_pieces = 0;
+          this.value_of_position.black_movility = 0;
+          this.value_of_position.black_position = 0;
+        }
+        for(let row_selected = 0; row_selected < 8; row_selected ++) {
+          for(let column_selected = 0; column_selected < 8; column_selected ++) {
+            let row = 0;
+            let column = 0;
+            if(this.board.white_side) {
+              row = row_selected;
+              column = column_selected;
+            } else {
+              row = 7-row_selected;
+              column = 7-column_selected;
+            }
+            const square = this.cordsX[column] + this.cordsY[row];
+            const piece = this.board.get_piece(row, column);
+            if (piece.name !== ''){
+              if (turn == 'white') {
+                if (piece.color == 'white') {
+                  this.value_of_position.white_pieces += piece.numerical_value;
+                  this.value_of_position.white_movility += this.get_possible_moves(square).length;
+                  this.value_of_position.white_position = this.value_of_position.white_pieces + this.value_of_position.white_movility;
+                }
+              } else {
+                if (piece.color == 'black') {
+                  this.value_of_position.black_pieces += piece.numerical_value;
+                  this.value_of_position.black_movility += this.get_possible_moves(square).length;
+                  this.value_of_position.black_position = this.value_of_position.black_pieces + this.value_of_position.black_movility;
+                }
+              }
+            }
+          }
+        }
+      }
+
       white_queen_castling() {
         if (this.white_can_queen_castling) {
           this.white_can_queen_castling = false;
@@ -107,6 +154,14 @@ export class MainComponent implements OnInit {
           this.black_can_queen_castling = false;
         } else {
           this.black_can_queen_castling = true;
+        }
+      }
+
+      set_learning() {
+        if (this.learning) {
+          this.learning = false;
+        } else {
+          this.learning = true;
         }
       }
 
@@ -208,6 +263,7 @@ export class MainComponent implements OnInit {
     
       rotate_board() {
         this.board.rotate_board();
+        this.check_specials();
       }
     
       save_pgn() {
@@ -337,23 +393,34 @@ export class MainComponent implements OnInit {
               pawn: 'p',
             };
             this.chess.move({ from: from, to: to, promotion: pieces[result]});
+            this.learn_move();
             this.newMove = new Move();
             this.refresh_board();
         }, cancel => {
             this.chess.move({ from: from, to: to, promotion: 'q'});
+            this.learn_move();
             this.newMove = new Move();
             this.refresh_board();
         });
       }
     
       play_pc() {
+        /*
         const gameOver = this.chess.game_over();
         if (!gameOver) {
           let possibleMoves = this.get_possible_moves();
           let move = possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
           this.chess.move(move);
           this.refresh_board();
-        }
+        }*/
+        this.new_best_move.current_position = this.chess.fen().split(' ')[0] + ' ' + this.chess.turn();
+        this.bestMoveDataService.find(this.new_best_move.current_position).then( r => {
+          const response = r as any[];
+          if (response.length > 0) {
+            this.chess.move(response[0].response);
+            this.refresh_board();
+          }
+        }).catch( e => { console.log(e); });
       }
     
       establecerPosicion() {
@@ -447,10 +514,12 @@ export class MainComponent implements OnInit {
               this.checking_move = this.current_move;
               return;
             }
+            this.new_best_move.current_position = this.chess.fen().split(' ')[0] + ' ' + this.chess.turn();
             if (( row == 0 || row == 7 ) && this.newMove.piece_moving == 'p') {
               this.showPropotionMenu(this.newMove.from, this.newMove.to);
             } else {
               this.chess.move({ from: this.newMove.from, to: this.newMove.to });
+              this.learn_move();
               this.refresh_board();
               this.newMove = new Move();
               this.current_move++;
@@ -460,6 +529,31 @@ export class MainComponent implements OnInit {
         }
       }
     
+      learn_move() {
+        if (!this.learning) {
+          return;
+        }
+        this.bestMoveDataService.find(this.new_best_move.current_position).then(
+          r => {
+            const response = r as any[];
+            this.new_best_move.response = this.get_last_move();
+            let in_knowledge = false;
+            response.forEach(best_response => {
+              if (best_response.response == this.new_best_move.response) {
+                in_knowledge = true;
+              }
+            });
+            if (!in_knowledge) {
+              this.bestMoveDataService.post(this.new_best_move).then(r1 => {
+                console.log('Aprendido');
+              }).catch( e => { console.log(e); });
+            } else {
+              console.log('Conocido');
+            }
+          }
+        ).catch( e => { console.log(e); });
+      }
+
       get_possible_moves(square?: string) {
         if (typeof(square) == 'undefined') {
           return this.chess.moves();
@@ -484,13 +578,26 @@ export class MainComponent implements OnInit {
     
       get_turn() {
         let turn = {w: 'white', b: 'black'};
-        return turn[this.chess.turn()];
+        let toReturn = turn[this.chess.turn()]
+        this.evaluateBoard(toReturn);
+        return toReturn;
       }
       
       get_PGN() {
         return '<strong>Histórico</strong><br/>' + this.chess.pgn({ max_width: 5, newline_char: '<br />' });
       }
     
+      get_last_move() {
+        const totalPGN = this.chess.pgn({ max_width: 5, newline_char: '\n' }).split('\n');
+        if (totalPGN != "") {
+          const lastLine = totalPGN[totalPGN.length - 1].split('. ')[1];
+          const moves = lastLine.split(' ');
+          return moves[moves.length - 1];
+        } else {
+          return totalPGN;
+        }
+      }
+
       check_specials() {
         let turno = 'Negras';
         if (this.get_turn() == 'white') {

@@ -29,6 +29,12 @@ class BestMoveController extends Controller
        return response()->json(BestMove::paginate($size),200);
     }
 
+    function find(Request $data)
+    {
+      $result = $data->json()->all();
+      return response()->json(BestMove::select('response')->where('current_position', $result['current_position'])->get(),200);
+    }
+
     function post(Request $data)
     {
        try{

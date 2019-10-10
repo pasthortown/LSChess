@@ -1,22 +1,24 @@
 export class Piece {
     public name: string;
     color: string;
-    value: number;
+    numerical_value: number;
     image: string;
     max_count: number;
+    symbol: string;
 
-    constructor(value?: string, color?: string) {
-        if ( typeof value === 'undefined') {
-            value = '';
+    constructor(symbol?: string, color?: string) {
+        if ( typeof symbol === 'undefined') {
+            symbol = '';
         }
+        this.symbol = symbol;
         if ( typeof color === 'undefined') {
-            this.getPiece(value);
+            this.getPiece(symbol);
         } else {
-            this.getPiece(value, color);
+            this.getPiece(symbol, color);
         }
     }
 
-    getPiece(value: string, color?: string) {
+    getPiece(symbol: string, color?: string) {
         let name = '';
         let piece_color = '';
         const Names = {
@@ -27,8 +29,8 @@ export class Piece {
             k: 'king',
             p: 'pawn',
         };
-        if (value !== ''){
-            if (value.toUpperCase() == value ) {
+        if (symbol !== ''){
+            if (symbol.toUpperCase() == symbol ) {
                 piece_color = 'white';
             } else {
                 piece_color = 'black';
@@ -36,7 +38,7 @@ export class Piece {
             if ( typeof color !== 'undefined') {
                 piece_color = color;
             }
-            name = Names[value.toLowerCase()];
+            name = Names[symbol.toLowerCase()];
             this.set(name, piece_color);
         } else {
             this.name = '';
@@ -90,7 +92,7 @@ export class Piece {
             pawn: 8,
         };
         this.max_count = max[this.name];
-        this.value = Valores[this.name];
+        this.numerical_value = Valores[this.name];
         this.refresh();
     }
 

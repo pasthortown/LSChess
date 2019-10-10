@@ -233,4 +233,16 @@ export class Board {
             } 
         });
     }
+
+    get_piece(row, column): Piece {
+        let color = 'black';
+        if (this.position[row][column].toUpperCase() == this.position[row][column]) {
+            color = 'white';
+        }
+        let toReturn = new Piece();
+        if (this.position[row][column] != '') {
+            toReturn = new Piece(this.pieces[row][column].symbol, color);   
+        }
+        return toReturn;
+    }
  }

@@ -30,6 +30,14 @@ export class BestMoveService {
       }).catch( error => { this.handledError(error.json()); });
    }
 
+   find(current_position: String): Promise<any> {
+      const data = {current_position: current_position};
+      return this.http.post(this.url + 'find', JSON.stringify(data), this.options).toPromise()
+      .then( r => {
+         return r.json();
+      }).catch( error => { this.handledError(error.json()); });
+   }
+
    get_paginate(size: number, page: number): Promise<any> {
       return this.http.get(this.url + 'paginate?size=' + size.toString() + '&page=' + page.toString(), this.options).toPromise()
       .then( r => {

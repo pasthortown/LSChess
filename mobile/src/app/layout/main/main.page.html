@@ -69,17 +69,38 @@
           </ion-list>
         </ion-col>
         <ion-col size="6">
-          <ion-list-header>
-            <ion-label>
-              <strong>Capturas:</strong>
-            </ion-label>          
-          </ion-list-header>
-          <ion-item>
-            {{player_black}}&nbsp;<i *ngFor="let piece of board.captured_by_black" class="{{ piece.image }}" style="margin-left: 5px;"></i>
-          </ion-item>
-          <ion-item>
-            {{player_white}}&nbsp;<i *ngFor="let piece of board.captured_by_white" class="{{ piece.image }}" style="margin-left: 5px;"></i>
-          </ion-item>  
+            <table style="width: 100%; text-align: left;">
+                <tr>
+                    <th colspan="2" style="text-align: center;">{{player_white}}</th>
+                </tr>
+                <tr>
+                    <th>Capturas <strong *ngIf="(value_of_position.white_pieces - value_of_position.black_pieces > 0) && (value_of_position.white_pieces - value_of_position.black_pieces < 1039)">+{{value_of_position.white_pieces - value_of_position.black_pieces}}</strong></th>
+                    <td>
+                        <i *ngFor="let piece of board.captured_by_white" class="{{ piece.image }}" style="margin-left: 5px;"></i>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Movilidad</th>
+                    <td>
+                        {{value_of_position.white_movility}}
+                    </td>
+                </tr>
+                <tr>
+                    <th colspan="2" style="text-align: center;">{{player_black}}</th>
+                </tr>
+                <tr>
+                    <th>Capturas <strong *ngIf="(value_of_position.black_pieces - value_of_position.white_pieces > 0) && (value_of_position.black_pieces - value_of_position.white_pieces < 1039)">+{{value_of_position.black_pieces - value_of_position.white_pieces}}</strong></th>
+                    <td>
+                        <i *ngFor="let piece of board.captured_by_black" class="{{ piece.image }}" style="margin-left: 5px;"></i>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Movilidad</th>
+                    <td>
+                        {{value_of_position.black_movility}}
+                    </td>
+                </tr>
+            </table>
         </ion-col>
       </ion-row>
       <ion-row *ngIf="!editarPosicion">

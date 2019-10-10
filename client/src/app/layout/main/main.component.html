@@ -21,8 +21,8 @@ name="files[]"
                     <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
                         <div class="btn-group" role="group" aria-label="First group">
                             <button title="Nueva - P vs P" class="btn btn-dark"><i class="fas fa-user"></i><i class="fas fa-user"></i></button>
-                            <button title="Nueva - IA vs P" class="btn btn-default"><i class="fas fa-robot"></i><i class="fas fa-user"></i></button>
-                            <button title="Nueva - IA vs IA" class="btn btn-default"><i class="fas fa-robot"></i><i class="fas fa-robot"></i></button>
+                            <button title="Nueva - IA vs P" class="btn btn-default" (click)="play_pc()"><i class="fas fa-robot"></i><i class="fas fa-user"></i></button>
+                            <button title="Nueva - IA vs IA" class="btn btn-default" (click)="evaluateBoard()"><i class="fas fa-robot"></i><i class="fas fa-robot"></i></button>
                         </div>
                     </div>
                 </td>
@@ -72,9 +72,13 @@ name="files[]"
                                 <button (click)="save_pgn()" title="Guardar Partida" class="btn btn-info"><i class="fas fa-save"></i></button>
                                 <button title="Cargar Partida" class="btn btn-info" (click)="cargarPartidaInput.click()"><i class="fas fa-folder-open"></i></button>
                             </div>
-                            <div class="btn-group" role="group" aria-label="First group">
+                            <div class="btn-group mr-2" role="group" aria-label="First group">
                                 <button title="Establecer Posición" class="btn btn-info" (click)="establecerPosicion()"><i class="fas fa-tools"></i></button>
-                            </div>    
+                            </div>  
+                            <div class="btn-group" role="group" aria-label="First group">
+                                <button title="Aprender" class="btn btn-dark" *ngIf="learning" (click)="set_learning()"><i class="fas fa-graduation-cap"></i></button>
+                                <button title="Aprender" class="btn btn-default" *ngIf="!learning" (click)="set_learning()"><i class="fas fa-graduation-cap"></i></button>
+                            </div>   
                         </div>
                     </div>
                 </div>
@@ -85,19 +89,38 @@ name="files[]"
             </div>
             <div class="col-6">
                 <div class="row">
-                    <div class="col-12">
-                        <strong>Capturas:</strong>
-                    </div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-12">
-                        {{player_white}}&nbsp;<i *ngFor="let piece of board.captured_by_white" class="{{ piece.image }}" style="margin-left: 5px;"></i>
-                    </div>
-                </div>
-                <div class="row mt-2">
-                    <div class="col-12">
-                        {{player_black}}&nbsp;<i *ngFor="let piece of board.captured_by_black" class="{{ piece.image }}" style="margin-left: 5px;"></i>
-                    </div>
+                    <table style="width: 100%; text-align: left;">
+                        <tr>
+                            <th colspan="2" style="text-align: center;">{{player_white}}</th>
+                        </tr>
+                        <tr>
+                            <th>Capturas <strong *ngIf="(value_of_position.white_pieces - value_of_position.black_pieces > 0) && (value_of_position.white_pieces - value_of_position.black_pieces < 1039)">+{{value_of_position.white_pieces - value_of_position.black_pieces}}</strong></th>
+                            <td>
+                                <i *ngFor="let piece of board.captured_by_white" class="{{ piece.image }}" style="margin-left: 5px;"></i>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Movilidad</th>
+                            <td>
+                                {{value_of_position.white_movility}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th colspan="2" style="text-align: center;">{{player_black}}</th>
+                        </tr>
+                        <tr>
+                            <th>Capturas <strong *ngIf="(value_of_position.black_pieces - value_of_position.white_pieces > 0) && (value_of_position.black_pieces - value_of_position.white_pieces < 1039)">+{{value_of_position.black_pieces - value_of_position.white_pieces}}</strong></th>
+                            <td>
+                                <i *ngFor="let piece of board.captured_by_black" class="{{ piece.image }}" style="margin-left: 5px;"></i>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Movilidad</th>
+                            <td>
+                                {{value_of_position.black_movility}}
+                            </td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </div>

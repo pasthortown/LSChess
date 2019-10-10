@@ -133,10 +133,14 @@ class AuthController extends Controller
 
   protected function send_mail($to, $toAlias, $subject, $body, $fromMail,$fromAlias) {
     $data = ['name'=>$toAlias, 'body'=>$body, 'appName'=>env('MAIL_FROM_NAME')];
-    Mail::send('mail', $data, function($message) use ($to, $toAlias, $subject, $fromMail,$fromAlias) {
-      $message->to($to, $toAlias)->subject($subject);
-      $message->from($fromMail,$fromAlias);
-    });
-    return response()->json("Success!",200);
+    try {
+      $response = Mail::send('mail', $data, function($message) use ($to, $toAlias, $subject, $fromMail,$fromAlias) {
+        $message->to($to, $toAlias)->subject($subject);
+        $message->from($fromMail,$fromAlias);
+      });
+      return response()->json('Success!!',200);
+    } catch (Exception $e) {
+      return response()->json($e->getMessage(),400);
+    }
   }
 }

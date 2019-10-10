@@ -32,6 +32,7 @@ export class MainPage implements OnInit {
     cordsY = ['8', '7', '6', '5', '4', '3', '2', '1'];
     tiempoNegras = '10:00';
     tiempoBlancas = '10:00';
+    value_of_position = {white_position: 0, black_position: 0, white_pieces: 0, black_pieces: 0, white_movility: 0, black_movility: 0};
     editarPosicion = false;
     current_position = '';
     timeNegras = 600;
@@ -51,6 +52,48 @@ export class MainPage implements OnInit {
 
     ngOnInit() {
         this.user = JSON.parse(sessionStorage.getItem('user'));
+    }
+
+    evaluateBoard(turn) {
+      if (turn == 'white') {
+        this.value_of_position.white_pieces = 0;
+        this.value_of_position.white_movility = 0;
+        this.value_of_position.white_position = 0;
+      } else {
+        this.value_of_position.black_pieces = 0;
+        this.value_of_position.black_movility = 0;
+        this.value_of_position.black_position = 0;
+      }
+      for(let row_selected = 0; row_selected < 8; row_selected ++) {
+        for(let column_selected = 0; column_selected < 8; column_selected ++) {
+          let row = 0;
+          let column = 0;
+          if(this.board.white_side) {
+            row = row_selected;
+            column = column_selected;
+          } else {
+            row = 7-row_selected;
+            column = 7-column_selected;
+          }
+          const square = this.cordsX[column] + this.cordsY[row];
+          const piece = this.board.get_piece(row, column);
+          if (piece.name !== ''){
+            if (turn == 'white') {
+              if (piece.color == 'white') {
+                this.value_of_position.white_pieces += piece.numerical_value;
+                this.value_of_position.white_movility += this.get_possible_moves(square).length;
+                this.value_of_position.white_position = this.value_of_position.white_pieces + this.value_of_position.white_movility;
+              }
+            } else {
+              if (piece.color == 'black') {
+                this.value_of_position.black_pieces += piece.numerical_value;
+                this.value_of_position.black_movility += this.get_possible_moves(square).length;
+                this.value_of_position.black_position = this.value_of_position.black_pieces + this.value_of_position.black_movility;
+              }
+            }
+          }
+        }
+      }
     }
 
     cargarPartida(event) {
@@ -434,7 +477,7 @@ export class MainPage implements OnInit {
           }
           if (this.newMove.from == '' || this.get_turn() == square_piece.color) {
             const piece_square = this.get_square_piece(row, column);
-            this.newMove.from = this.cordsX[column] + this.cordsY[row];  
+            this.newMove.from = this.cordsX[column] + this.cordsY[row];
             this.newMove.piece_moving = piece_square.piece;
             this.newMove.piece_moving_color = piece_square.color;
             this.board.drawPossibleMoves(this.get_possible_moves(this.newMove.from), square_piece.piece);
@@ -491,7 +534,9 @@ export class MainPage implements OnInit {
     
       get_turn() {
         let turn = {w: 'white', b: 'black'};
-        return turn[this.chess.turn()];
+        let toReturn = turn[this.chess.turn()]
+        this.evaluateBoard(toReturn);
+        return toReturn;
       }
       
       get_PGN() {
