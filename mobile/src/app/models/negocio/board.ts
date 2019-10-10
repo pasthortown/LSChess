@@ -235,14 +235,14 @@ export class Board {
     }
 
     get_piece(row, column): Piece {
-        let color = 'black';
-        if (this.position[row][column].toUpperCase() == this.position[row][column]) {
-            color = 'white';
+        let piece_color = '';
+        if (this.position[row][column] !== '') {
+            if(this.position[row][column].toUpperCase() == this.position[row][column]) {
+                piece_color = 'white';
+            } else {
+                piece_color = 'black';
+            }
         }
-        let toReturn = new Piece();
-        if (this.position[row][column] != '') {
-            toReturn = new Piece(this.pieces[row][column].symbol, color);   
-        }
-        return toReturn;
+        return new Piece(this.position[row][column], piece_color);
     }
  }

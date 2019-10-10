@@ -77,7 +77,7 @@ export class MainPage implements OnInit {
           }
           const square = this.cordsX[column] + this.cordsY[row];
           const piece = this.board.get_piece(row, column);
-          if (piece.name !== ''){
+          if (piece.name !== '') {
             if (turn == 'white') {
               if (piece.color == 'white') {
                 this.value_of_position.white_pieces += piece.numerical_value;
