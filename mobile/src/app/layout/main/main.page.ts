@@ -2,7 +2,7 @@ import { environment } from './../../../environments/environment';
 import { Component, OnInit } from '@angular/core';
 import { Board } from 'src/app/models/negocio/board';
 import * as Chess from 'chess.js';
-import { Move } from 'src/app/models/LSCHESS/Move';
+import { Move } from 'src/app/models/negocio/move';
 import Swal from 'sweetalert2'
 import { PickerController } from '@ionic/angular';
 import { PickerOptions, PickerButton } from '@ionic/core';

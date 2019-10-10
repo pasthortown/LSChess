@@ -1,6 +1,6 @@
 <div class="row">
    <h1 class="col-12 text-right">
-      Move
+      BestMove
    </h1>
 </div>
 <div class="row">
@@ -10,11 +10,11 @@
             <button type="button" class="btn btn-primary" title="Actualizar" (click)="goToPage(currentPage)"><i class="fas fa-sync"></i></button>
          </div>
          <div class="btn-group mr-2" role="group">
-            <button type="button" title="Nuevo" class="btn btn-success" (click)="newMove(content)"><i class="fas fa-file"></i></button>
-            <button type="button" title="Editar" class="btn btn-warning" (click)="editMove(content)"><i class="fas fa-edit"></i></button>
+            <button type="button" title="Nuevo" class="btn btn-success" (click)="newBestMove(content)"><i class="fas fa-file"></i></button>
+            <button type="button" title="Editar" class="btn btn-warning" (click)="editBestMove(content)"><i class="fas fa-edit"></i></button>
          </div>
          <div class="btn-group mr-2" role="group">
-            <button type="button" title="Eliminar" class="btn btn-danger" (click)="deleteMove()"><i class="fas fa-trash"></i></button>
+            <button type="button" title="Eliminar" class="btn btn-danger" (click)="deleteBestMove()"><i class="fas fa-trash"></i></button>
          </div>
          <div class="btn-group mr-2" role="group">
             <button type="button" title="BackUp" class="btn btn-dark" (click)="backup()"><i class="fas fa-download"></i></button>
@@ -31,19 +31,15 @@
          <thead>
             <tr>
                <th>Seleccionado</th>
-               <th>from</th>
-               <th>to</th>
-               <th>moment</th>
-               <th>pgn</th>
+               <th>current_position</th>
+               <th>response</th>
             </tr>
          </thead>
          <tbody>
-            <tr *ngFor="let move of moves" (click)="selectMove(move)">
-               <td class="text-right"><span *ngIf="moveSelected === move" class="far fa-hand-point-right"></span></td>
-               <td>{{move.from}}</td>
-               <td>{{move.to}}</td>
-               <td>{{move.moment}}</td>
-               <td>{{move.pgn}}</td>
+            <tr *ngFor="let best_move of best_moves" (click)="selectBestMove(best_move)">
+               <td class="text-right"><span *ngIf="best_moveSelected === best_move" class="far fa-hand-point-right"></span></td>
+               <td>{{best_move.current_position}}</td>
+               <td>{{best_move.response}}</td>
             </tr>
          </tbody>
       </table>
@@ -81,27 +77,15 @@
       <div class="row">
          <div class="col-12">
             <div class="form-group row">
-               <label for="from" class="col-4 col-form-label">from</label>
+               <label for="current_position" class="col-4 col-form-label">current_position</label>
                <div class="col-8">
-                  <input type="text" class="form-control" id="from" name="from" placeholder="from" [(ngModel)]="moveSelected.from">
+                  <input type="text" class="form-control" id="current_position" name="current_position" placeholder="currentPosition" [(ngModel)]="best_moveSelected.current_position">
                </div>
             </div>
             <div class="form-group row">
-               <label for="to" class="col-4 col-form-label">to</label>
+               <label for="response" class="col-4 col-form-label">response</label>
                <div class="col-8">
-                  <input type="text" class="form-control" id="to" name="to" placeholder="to" [(ngModel)]="moveSelected.to">
-               </div>
-            </div>
-            <div class="form-group row">
-               <label for="moment" class="col-4 col-form-label">moment</label>
-               <div class="col-8">
-                  <input type="date" class="form-control" id="moment" name="moment" placeholder="moment" [ngModel]="moveSelected.moment | date:'y-MM-dd'" (ngModelChange)="moveSelected.moment = $event">
-               </div>
-            </div>
-            <div class="form-group row">
-               <label for="pgn" class="col-4 col-form-label">pgn</label>
-               <div class="col-8">
-                  <ck-editor id="pgn" name="pgn" skin="moono-lisa" [(ngModel)]="moveSelected.pgn"></ck-editor>
+                  <input type="text" class="form-control" id="response" name="response" placeholder="response" [(ngModel)]="best_moveSelected.response">
                </div>
             </div>
          </div>

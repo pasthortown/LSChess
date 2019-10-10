@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { Http, RequestOptions, Headers } from '@angular/http';
 import { Router } from '@angular/router';
 import { environment } from './../../../../environments/environment';
-import { Move } from './../../../models/LSCHESS/Move';
+import { BestMove } from './../../../models/LSCHESS/BestMove';
 
 @Injectable({
    providedIn: 'root'
 })
-export class MoveService {
+export class BestMoveService {
 
-   url = environment.api_lschess + 'move/';
+   url = environment.api_lschess + 'bestmove/';
    options = new RequestOptions();
 
    constructor(private http: Http, private router: Router) {
@@ -51,15 +51,15 @@ export class MoveService {
       }).catch( error => { this.handledError(error.json()); });
    }
 
-   post(move: Move): Promise<any> {
-      return this.http.post(this.url, JSON.stringify(move), this.options).toPromise()
+   post(bestmove: BestMove): Promise<any> {
+      return this.http.post(this.url, JSON.stringify(bestmove), this.options).toPromise()
       .then( r => {
          return r.json();
       }).catch( error => { this.handledError(error.json()); });
    }
 
-   put(move: Move): Promise<any> {
-      return this.http.put(this.url, JSON.stringify(move), this.options).toPromise()
+   put(bestmove: BestMove): Promise<any> {
+      return this.http.put(this.url, JSON.stringify(bestmove), this.options).toPromise()
       .then( r => {
          return r.json();
       }).catch( error => { this.handledError(error.json()); });

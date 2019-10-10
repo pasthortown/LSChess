@@ -4,12 +4,6 @@ import { ToastrManager } from 'ng6-toastr-notifications';
 import { saveAs } from 'file-saver/FileSaver';
 import { GameService } from './../../../../services/CRUD/LSCHESS/game.service';
 import { Game } from './../../../../models/LSCHESS/Game';
-import { GameStateService } from './../../../../services/CRUD/LSCHESS/gamestate.service';
-import { GameState } from './../../../../models/LSCHESS/GameState';
-
-import { MoveService } from './../../../../services/CRUD/LSCHESS/move.service';
-import { Move } from './../../../../models/LSCHESS/Move';
-
 
 @Component({
    selector: 'app-game',
@@ -24,45 +18,17 @@ export class GameComponent implements OnInit {
    lastPage = 1;
    showDialog = false;
    recordsByPage = 5;
-   game_states: GameState[] = [];
-   moves: Move[] = [];
-   moves_gameSelectedId: number;
    constructor(
                private modalService: NgbModal,
                private toastr: ToastrManager,
-               private game_stateDataService: GameStateService,
-               private moveDataService: MoveService,
                private gameDataService: GameService) {}
 
    ngOnInit() {
       this.goToPage(1);
-      this.getGameState();
-      this.getMove();
    }
 
    selectGame(game: Game) {
       this.gameSelected = game;
-   }
-
-   getGameState() {
-      this.game_states = [];
-      this.game_stateDataService.get().then( r => {
-         this.game_states = r as GameState[];
-      }).catch( e => console.log(e) );
-   }
-
-   getMove() {
-      this.moves = [];
-      this.moveDataService.get().then( r => {
-         this.moves = r as Move[];
-      }).catch( e => console.log(e) );
-   }
-
-   getMovesOnGame() {
-      this.gameSelected.moves_on_game = [];
-      this.gameDataService.get(this.gameSelected.id).then( r => {
-         this.gameSelected.moves_on_game = r.attach[0].moves_on_game as Move[];
-      }).catch( e => console.log(e) );
    }
 
    goToPage(page: number) {
@@ -77,8 +43,6 @@ export class GameComponent implements OnInit {
    getGames() {
       this.games = [];
       this.gameSelected = new Game();
-      this.gameSelected.game_state_id = 0;
-      this.moves_gameSelectedId = 0;
       this.gameDataService.get_paginate(this.recordsByPage, this.currentPage).then( r => {
          this.games = r.data as Game[];
          this.lastPage = r.last_page;
@@ -87,21 +51,14 @@ export class GameComponent implements OnInit {
 
    newGame(content) {
       this.gameSelected = new Game();
-      this.gameSelected.game_state_id = 0;
-      this.moves_gameSelectedId = 0;
       this.openDialog(content);
    }
 
    editGame(content) {
-      if ( typeof this.gameSelected.moves_on_game === 'undefined' ) {
-         this.gameSelected.moves_on_game = [];
-      }
       if (typeof this.gameSelected.id === 'undefined') {
          this.toastr.errorToastr('Debe seleccionar un registro.', 'Error');
          return;
       }
-      this.getMovesOnGame();
-      this.moves_gameSelectedId = 0;
       this.openDialog(content);
    }
 
@@ -128,9 +85,9 @@ export class GameComponent implements OnInit {
    toCSV() {
       this.gameDataService.get().then( r => {
          const backupData = r as Game[];
-         let output = 'id;id_player_white;id_player_black;start_time;end_time;start_position;first_move;game_state_id\n';
+         let output = 'id;id_player_white;id_player_black;start_time;end_time;start_fen;pgn\n';
          backupData.forEach(element => {
-            output += element.id; + element.id_player_white + ';' + element.id_player_black + ';' + element.start_time + ';' + element.end_time + ';' + element.start_position + ';' + element.first_move + ';' + element.game_state_id + '\n';
+            output += element.id; + element.id_player_white + ';' + element.id_player_black + ';' + element.start_time + ';' + element.end_time + ';' + element.start_fen + ';' + element.pgn + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();
@@ -151,55 +108,6 @@ export class GameComponent implements OnInit {
             }).catch( e => console.log(e) );
          };
       }
-   }
-
-   selectMove(move: Move) {
-      this.moves_gameSelectedId = move.id;
-   }
-
-   addMove() {
-      if (this.moves_gameSelectedId === 0) {
-         this.toastr.errorToastr('Seleccione un registro.', 'Error');
-         return;
-      }
-      this.moves.forEach(move => {
-         if (move.id == this.moves_gameSelectedId) {
-            let existe = false;
-            this.gameSelected.moves_on_game.forEach(element => {
-               if (element.id == move.id) {
-                  existe = true;
-               }
-            });
-            if (!existe) {
-               this.gameSelected.moves_on_game.push(move);
-               this.moves_gameSelectedId = 0;
-            } else {
-               this.toastr.errorToastr('El registro ya existe.', 'Error');
-            }
-         }
-      });
-   }
-
-   removeMove() {
-      if (this.moves_gameSelectedId === 0) {
-         this.toastr.errorToastr('Seleccione un registro.', 'Error');
-         return;
-      }
-      const newMoves: Move[] = [];
-      let eliminado = false;
-      this.gameSelected.moves_on_game.forEach(move => {
-         if (move.id !== this.moves_gameSelectedId) {
-            newMoves.push(move);
-         } else {
-            eliminado = true;
-         }
-      });
-      if (!eliminado) {
-         this.toastr.errorToastr('Registro no encontrado.', 'Error');
-         return;
-      }
-      this.gameSelected.moves_on_game = newMoves;
-      this.moves_gameSelectedId = 0;
    }
 
    openDialog(content) {

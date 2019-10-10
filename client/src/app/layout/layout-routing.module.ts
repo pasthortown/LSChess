@@ -19,21 +19,6 @@ const routes: Routes = [
             path: 'profile',
             loadChildren: './profile/profile.module#ProfileModule'
          },
-
-         //LSChess
-
-         {
-            path: 'game',
-            loadChildren: './CRUD/LSCHESS/Game/game.module#GameModule'
-         },
-         {
-            path: 'game_state',
-            loadChildren: './CRUD/LSCHESS/GameState/gamestate.module#GameStateModule'
-         },
-         {
-            path: 'move',
-            loadChildren: './CRUD/LSCHESS/Move/move.module#MoveModule'
-         },
          {
             path: 'blank',
             loadChildren: './blank-page/blank-page.module#BlankPageModule'
@@ -41,6 +26,15 @@ const routes: Routes = [
          {
             path: 'not-found',
             loadChildren: './not-found/not-found.module#NotFoundModule'
+         },
+         //LSChess
+         {
+            path: 'game',
+            loadChildren: './CRUD/LSCHESS/Game/game.module#GameModule'
+         },
+         {
+            path: 'best_move',
+            loadChildren: './CRUD/LSCHESS/BestMove/bestmove.module#BestMoveModule'
          },
          {
             path: '**',

@@ -9,18 +9,11 @@
          </a>
          <li class="nested" [class.expand]="showMenu === 'bdd lschess'">
             <ul class="submenu">
-
-
-               //LSChess
-
                <li>
                   <a [routerLink]="['/game']" [routerLinkActive]="['router-link-active']" class="list-group-item">Game </a>
                </li>
                <li>
-                  <a [routerLink]="['/game_state']" [routerLinkActive]="['router-link-active']" class="list-group-item">GameState </a>
-               </li>
-               <li>
-                  <a [routerLink]="['/move']" [routerLinkActive]="['router-link-active']" class="list-group-item">Move </a>
+                  <a [routerLink]="['/best_move']" [routerLinkActive]="['router-link-active']" class="list-group-item">BestMove </a>
                </li>
             </ul>
          </li>

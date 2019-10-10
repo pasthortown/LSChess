@@ -1,18 +1,18 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { GameStateComponent } from './gamestate.component';
+import { BestMoveComponent } from './bestmove.component';
 
-describe('GameStateComponent', () => {
-   let component: GameStateComponent;
-   let fixture: ComponentFixture<GameStateComponent>;
+describe('BestMoveComponent', () => {
+   let component: BestMoveComponent;
+   let fixture: ComponentFixture<BestMoveComponent>;
 
    beforeEach(async(() => {
       TestBed.configureTestingModule({
-         declarations: [GameStateComponent]
+         declarations: [BestMoveComponent]
       }).compileComponents();
    }));
 
    beforeEach(() => {
-      fixture = TestBed.createComponent(GameStateComponent);
+      fixture = TestBed.createComponent(BestMoveComponent);
       component = fixture.componentInstance;
       fixture.detectChanges();
    });

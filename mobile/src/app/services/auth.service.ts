@@ -11,7 +11,7 @@ export class AuthService {
 
   login(email: String, password: String): Promise<any> {
     const data = {email: email, password: password};
-    return this.http.post(environment.api + 'login', JSON.stringify(data)).toPromise()
+    return this.http.post(environment.api_lschess + 'login', JSON.stringify(data)).toPromise()
     .then( r =>
       r.json()
     ).catch( error => {
@@ -21,7 +21,7 @@ export class AuthService {
 
   register(name: String, email: String): Promise<any> {
     const data = {name: name, email: email};
-    return this.http.post(environment.api + 'register', JSON.stringify(data)).toPromise()
+    return this.http.post(environment.api_lschess + 'register', JSON.stringify(data)).toPromise()
     .then( r =>
       r.json()
     ).catch( error => {
@@ -31,7 +31,7 @@ export class AuthService {
 
   password_recovery_request(email: String): Promise<any> {
     const data = {email: email};
-    return this.http.post(environment.api + 'password_recovery_request', JSON.stringify(data)).toPromise()
+    return this.http.post(environment.api_lschess + 'password_recovery_request', JSON.stringify(data)).toPromise()
     .then( r =>
       r.json()
     ).catch( error => {
@@ -44,7 +44,7 @@ export class AuthService {
     const options = new RequestOptions();
     options.headers = new Headers();
     options.headers.append('api_token', sessionStorage.getItem('api_token'));
-    return this.http.post(environment.api + 'user/password_change', JSON.stringify(data), options).toPromise()
+    return this.http.post(environment.api_lschess + 'user/password_change', JSON.stringify(data), options).toPromise()
     .then( r =>
       r.json()
     ).catch( error => {

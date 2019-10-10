@@ -6,8 +6,6 @@ import { GameRoutingModule } from './game-routing.module';
 import { GameComponent } from './game.component';
 import { GameService } from './../../../../services/CRUD/LSCHESS/game.service';
 import { environment } from 'src/environments/environment';
-import { GameStateService } from './../../../../services/CRUD/LSCHESS/gamestate.service';
-import { MoveService } from './../../../../services/CRUD/LSCHESS/move.service';
 import { CKEditorModule } from 'ngx-ckeditor';
 
 @NgModule({
@@ -18,8 +16,6 @@ import { CKEditorModule } from 'ngx-ckeditor';
    declarations: [GameComponent],
    providers: [
                NgbModal,
-               GameStateService,
-               MoveService,
                GameService
                ]
 })

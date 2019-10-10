@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { GameStateComponent } from './gamestate.component';
+import { BestMoveComponent } from './bestmove.component';
 
 const routes: Routes = [
    {
       path: '',
-      component: GameStateComponent
+      component: BestMoveComponent
    }
 ];
 
@@ -13,4 +13,4 @@ const routes: Routes = [
    imports: [RouterModule.forChild(routes)],
    exports: [RouterModule]
 })
-export class GameStateRoutingModule {}
+export class BestMoveRoutingModule {}

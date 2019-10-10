@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { environment } from './../../../environments/environment';
 import { Board } from 'src/app/models/negocio/board';
 import * as Chess from 'chess.js';
-import { Move } from 'src/app/models/LSCHESS/Move';
+import { Move } from 'src/app/models/negocio/move';
 import Swal from 'sweetalert2'
 import { saveAs } from 'file-saver/FileSaver';
 import { Cycle } from 'src/app/models/negocio/cycle';
