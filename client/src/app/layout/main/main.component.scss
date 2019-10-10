@@ -1,104 +1,104 @@
-  .tablero {
-    margin: 5px auto;
-    border-style: solid;
-    border-color: #29293d;
-    border-width: 10px;
-    background: #666699;
-  }
-  
-  .tablero tr:nth-child(odd) td:nth-child(even),
-  .tablero tr:nth-child(even) td:nth-child(odd) {
-    background: #f0f0f5;
-    border-style: solid;
-    border-width: 1px;
-    border-color: #f0f0f5;
-  }
-  
-  .tablero td:hover {
-    background-color: rgba(95, 202, 74, 0.8);
-    border-style: solid;
-    border-width: 1px;
-    border-color: greenyellow;
-  }
-  
-  .tablero tr:nth-child(odd):hover td:nth-child(even):hover,
-  .tablero tr:nth-child(even):hover td:nth-child(odd):hover {
-    background-color: rgba(95, 202, 74, 0.8);
-    border-style: solid;
-    border-width: 1px;
-    border-color: greenyellow;
-  }
-  
-  .tablero td {
-    text-align: center;
-    border-style: solid;
-    border-width: 2px;
-    border-color: #666699;
-  }
+.tablero {
+  margin: 5px auto;
+  border-style: solid;
+  border-color: #29293d;
+  border-width: 3px;
+  background: #666699;
+}
 
-  .white-turn {
-    color: white;
-    text-shadow: -1px 0 black, 0 2px black, 2px 0 black, 0 -1px black;
-  }
+.tablero tr:nth-child(odd) td:nth-child(even),
+.tablero tr:nth-child(even) td:nth-child(odd) {
+  background: #f0f0f5;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #f0f0f5;
+}
 
-  .black-turn {
-    color: #3a3f4d;
-    text-shadow: -1px 0 black, 0 2px black, 2px 0 black, 0 -1px black;
-  }
-  
-  .square {
-    width: 9vh;
-    height: 9vh;
-    font-size: 5vh;
-  }
+.tablero td:hover {
+  background-color: rgba(95, 202, 74, 0.8);
+  border-style: solid;
+  border-width: 1px;
+  border-color: greenyellow;
+}
 
-  .historical {
-    width: 72vh;
-    margin: auto;
-  }
+.tablero tr:nth-child(odd):hover td:nth-child(even):hover,
+.tablero tr:nth-child(even):hover td:nth-child(odd):hover {
+  background-color: rgba(95, 202, 74, 0.8);
+  border-style: solid;
+  border-width: 1px;
+  border-color: greenyellow;
+}
 
-  .border-column {
-    height: 20px;
-    font-size: 14px;
-    color: black;
-    font-weight: bold;
-  }
+.tablero td {
+  text-align: center;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #666699;
+}
 
-  .border-row {
-    width: 20px;
-    font-size: 14px;
-    color: black;
-    font-weight: bold;
-  }
+.white-turn {
+  color: white;
+  text-shadow: -1px 0 black, 0 2px black, 2px 0 black, 0 -1px black;
+}
 
-  .white {
-    color: white;
-    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-  }
-  
-  .black {
-    color: #3a3f4d;
-    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-  }
+.black-turn {
+  color: #3a3f4d;
+  text-shadow: -1px 0 black, 0 2px black, 2px 0 black, 0 -1px black;
+}
 
-  .shadow {
-    color: rgba(87, 221, 214, 0.6);
-  }
+.square {
+  width: 9vh;
+  height: 9vh;
+  font-size: 5vh;
+}
 
-  .disabled {
-    color: rgba(162, 179, 178, 0.6);
-  }
+.historical {
+  width: 72vh;
+  margin: auto;
+}
 
-  .selected {
-    color: rgba(199, 219, 19, 0.9);
-  }
-  
-  .capture {
-    color: rgba(226, 73, 13, 0.7);
-    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-  }
-  
-  .check {
-    color: rgba(221, 49, 72, 0.8);
-    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-  }
+.border-column {
+  height: 15px;
+  font-size: 6px;
+  color: black;
+  font-weight: bold;
+}
+
+.border-row {
+  width: 15px;
+  font-size: 6px;
+  color: black;
+  font-weight: bold;
+}
+
+.white {
+  color: white;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+.black {
+  color: #3a3f4d;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+.shadow {
+  color: rgba(87, 221, 214, 0.6);
+}
+
+.disabled {
+  color: rgba(162, 179, 178, 0.6);
+}
+
+.selected {
+  color: rgba(199, 219, 19, 0.9);
+}
+
+.capture {
+  color: rgba(226, 73, 13, 0.7);
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+.check {
+  color: rgba(221, 49, 72, 0.8);
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}

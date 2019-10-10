@@ -19,8 +19,8 @@
 
 <ion-content>
   <ion-row>
-    <ion-col size="5">
-      <table>
+    <ion-col size="6">
+      <table class="tablero">
         <tr *ngFor="let square_row of board.pieces; let row = index;">
           <td class="border-row" *ngIf="board.white_side" style="font-size: 10px;">{{cordsY[row]}}</td>
           <td class="border-row" *ngIf="!board.white_side" style="font-size: 10px;">{{cordsY[7-row]}}</td>
@@ -45,8 +45,8 @@
         </tr>
       </table>
     </ion-col>
-    <ion-col size="7">
-      <ion-row>
+    <ion-col size="6">
+      <ion-row *ngIf="!editarPosicion">
         <ion-col size="6">
           <ion-list>
             <ion-list-header>
@@ -60,8 +60,6 @@
                   (change)="cargarPartida($event)"
                 />
                 <ion-button (click)="undo_move()" title="Deshacer Movimiento" shape="round" size="small"><i class="fas fa-arrow-left"></i></ion-button>
-                <ion-button (click)="save_pgn()" title="Guardar Partida" color="tertiary" shape="round" size="small"><i class="fas fa-save"></i></ion-button>
-                <ion-button title="Cargar Partida" color="tertiary" shape="round" size="small" (click)="cargarPartidaInput.click()"><i class="fas fa-folder-open"></i></ion-button>
               </ion-label>          
             </ion-list-header>
             <ion-item>
@@ -84,7 +82,7 @@
           </ion-item>  
         </ion-col>
       </ion-row>
-      <ion-row>
+      <ion-row *ngIf="!editarPosicion">
         <ion-col size="12">
           <ion-list>
             <ion-item>
@@ -103,6 +101,51 @@
           </ion-list>
         </ion-col>
       </ion-row>
+      <ion-row>
+        <ion-col size="12" *ngIf="editarPosicion">
+          <ion-list-header>
+            <ion-label>
+              <strong>Piezas Disponibles:</strong>
+            </ion-label>          
+          </ion-list-header>
+          <table class="tablero">
+            <tr *ngFor="let row_square of board.buildingPieces; let row = index;">
+              <td class="square" *ngFor="let piece of row_square; let column = index;"
+                (click)="selectBuildingPiece(row, column)">
+                <span class="{{ piece.image }}"></span>
+              </td>
+            </tr>
+          </table>
+        </ion-col>
+        <ion-col size="12" *ngIf="editarPosicion">
+          <table style="width: 54vh; margin: auto;">
+            <tr>
+              <th style="text-align: right;"><label><strong>Juegan:</strong></label></th>
+              <td style="text-align: left;"><label>&nbsp;<i class="fas fa-square white-turn" (click)="set_next_turn()" *ngIf="next_turn=='white'"></i><i class="fas fa-square black-turn" (click)="set_next_turn()" *ngIf="next_turn=='black'"></i></label></td>        
+              <td style="text-align: right;">
+                <ion-button title="Limpiar Tablero" (click)="cleanBoard()" size="small" color="medium"><i class="fas fa-eraser"></i><i class="fas fa-chess-board"></i></ion-button>
+                <ion-button title="Reiniciar Posición" (click)="resetBoard()" size="small" color="medium"><i class="fas fa-sync"></i><i class="fas fa-chess-board"></i></ion-button>
+              </td>
+            </tr>
+          </table>
+          <table style="width: 54vh; margin: auto;">
+            <tr>
+              <th style="text-align: right;"><label><strong>Enroques Blancas:</strong></label></th>
+              <td style="text-align: left;">&nbsp;<label (click)="white_queen_castling()" *ngIf="white_can_queen_castling" style="color: lime"><i class="fas fa-chess-queen"></i></label><label (click)="white_queen_castling()" *ngIf="!white_can_queen_castling" style="color: red;"><i class="fas fa-chess-queen"></i></label>&nbsp;<label (click)="white_king_castling()" *ngIf="white_can_king_castling" style="color: lime"><i class="fas fa-chess-king"></i></label><label (click)="white_king_castling()" *ngIf="!white_can_king_castling" style="color: red;"><i class="fas fa-chess-king"></i></label></td>
+            </tr>
+            <tr>
+              <th style="text-align: right;"><label><strong>Enroques Negras:</strong></label></th>
+              <td style="text-align: left;">&nbsp;<label (click)="black_queen_castling()" *ngIf="black_can_queen_castling" style="color: lime"><i class="fas fa-chess-queen"></i></label><label (click)="black_queen_castling()" *ngIf="!black_can_queen_castling" style="color: red;"><i class="fas fa-chess-queen"></i></label>&nbsp;<label (click)="black_king_castling()" *ngIf="black_can_king_castling" style="color: lime"><i class="fas fa-chess-king"></i></label><label (click)="black_king_castling()" *ngIf="!black_can_king_castling" style="color: red;"><i class="fas fa-chess-king"></i></label></td>
+            </tr>
+            <tr>
+              <td style="text-align: center;" colspan="2">
+                <ion-button title="Aceptar" (click)="finishSetPosition()" size="small" color="success"><i class="fas fa-check-circle"></i></ion-button>
+                <ion-button title="Cancelar" (click)="cancelSetPosition()" size="small" color="danger"><i class="fas fa-times-circle"></i></ion-button>
+              </td>
+            </tr>
+          </table>
+        </ion-col>
+      </ion-row>
     </ion-col>
   </ion-row>
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
@@ -110,7 +153,7 @@
       <ion-icon name="logo-game-controller-b"></ion-icon>
     </ion-fab-button>
     <ion-fab-list side="top">
-      <ion-fab-button title="Establecer Posición"><i class="fas fa-pencil-alt"></i></ion-fab-button>
+      <ion-fab-button title="Establecer Posición" (click)="establecerPosicion()"><i class="fas fa-pencil-alt"></i></ion-fab-button>
       <ion-fab-button title="Nueva - P2P"><i class="fas fa-user"></i> <i class="fas fa-user"></i></ion-fab-button>
       <ion-fab-button title="Nueva - P2C"><i class="fas fa-robot"></i> <i class="fas fa-user"></i></ion-fab-button>
       <ion-fab-button title="Nueva - C2C"><i class="fas fa-robot"></i> <i class="fas fa-robot"></i></ion-fab-button>

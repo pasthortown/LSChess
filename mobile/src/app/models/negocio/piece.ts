@@ -1,8 +1,9 @@
 export class Piece {
-    name: string;
+    public name: string;
     color: string;
     value: number;
     image: string;
+    max_count: number;
 
     constructor(value?: string, color?: string) {
         if ( typeof value === 'undefined') {
@@ -44,6 +45,31 @@ export class Piece {
         }
     }
 
+    public get_max_count() {
+        return this.max_count;
+    }
+
+    public get_symbol() {
+        const symbols = {
+            rook: 'r',
+            knight: 'n',
+            bishop: 'b',
+            queen: 'q',
+            king: 'k',
+            pawn: 'p',
+            '': 'empty',
+        };
+        const symbol = symbols[this.name];
+        if ( this.color == 'white') {
+            return symbol.toUpperCase();
+        }
+        return symbol;
+    }
+
+    public get_color() {
+        return this.color;
+    }
+
     public set(name: string, color: string) {
         this.name = name;
         this.color = color;
@@ -55,7 +81,21 @@ export class Piece {
             king: 1000,
             pawn: 1,
         };
+        const max = {
+            rook: 10,
+            knight: 10,
+            bishop: 10,
+            queen: 9,
+            king: 1,
+            pawn: 8,
+        };
+        this.max_count = max[this.name];
         this.value = Valores[this.name];
+        this.refresh();
+    }
+
+    setColor(color: string) {
+        this.color = color;
         this.refresh();
     }
 
