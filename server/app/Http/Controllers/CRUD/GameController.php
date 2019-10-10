@@ -19,8 +19,6 @@ class GameController extends Controller
        } else {
           $game = Game::findOrFail($id);
           $attach = [];
-          $moves_on_game = $game->Moves()->get();
-          array_push($attach, ["moves_on_game"=>$moves_on_game]);
           return response()->json(["Game"=>$game, "attach"=>$attach],200);
        }
     }
@@ -47,14 +45,9 @@ class GameController extends Controller
           $game->id_player_black = $result['id_player_black'];
           $game->start_time = $result['start_time'];
           $game->end_time = $result['end_time'];
-          $game->start_position = $result['start_position'];
-          $game->first_move = $result['first_move'];
-          $game->game_state_id = $result['game_state_id'];
+          $game->start_fen = $result['start_fen'];
+          $game->pgn = $result['pgn'];
           $game->save();
-          $moves_on_game = $result['moves_on_game'];
-          foreach( $moves_on_game as $move) {
-             $game->Moves()->attach($move['id']);
-          }
           DB::commit();
        } catch (Exception $e) {
           return response()->json($e,400);
@@ -72,35 +65,9 @@ class GameController extends Controller
              'id_player_black'=>$result['id_player_black'],
              'start_time'=>$result['start_time'],
              'end_time'=>$result['end_time'],
-             'start_position'=>$result['start_position'],
-             'first_move'=>$result['first_move'],
-             'game_state_id'=>$result['game_state_id'],
+             'start_fen'=>$result['start_fen'],
+             'pgn'=>$result['pgn'],
           ]);
-          $game = Game::where('id',$result['id'])->first();
-          $moves_on_game = $result['moves_on_game'];
-          $moves_on_game_old = $game->Moves()->get();
-          foreach( $moves_on_game_old as $move_old ) {
-             $delete = true;
-             foreach( $moves_on_game as $move ) {
-                if ( $move_old->id === $move['id'] ) {
-                   $delete = false;
-                }
-             }
-             if ( $delete ) {
-                $game->Moves()->detach($move_old->id);
-             }
-          }
-          foreach( $moves_on_game as $move ) {
-             $add = true;
-             foreach( $moves_on_game_old as $move_old) {
-                if ( $move_old->id === $move['id'] ) {
-                   $add = false;
-                }
-             }
-             if ( $add ) {
-                $game->Moves()->attach($move['id']);
-             }
-          }
           DB::commit();
        } catch (Exception $e) {
           return response()->json($e,400);
@@ -120,8 +87,6 @@ class GameController extends Controller
        $toReturn = [];
        foreach( $games as $game) {
           $attach = [];
-          $moves_on_game = $game->Moves()->get();
-          array_push($attach, ["moves_on_game"=>$moves_on_game]);
           array_push($toReturn, ["Game"=>$game, "attach"=>$attach]);
        }
        return response()->json($toReturn,200);
@@ -142,9 +107,8 @@ class GameController extends Controller
              'id_player_black'=>$result['id_player_black'],
              'start_time'=>$result['start_time'],
              'end_time'=>$result['end_time'],
-             'start_position'=>$result['start_position'],
-             'first_move'=>$result['first_move'],
-             'game_state_id'=>$result['game_state_id'],
+             'start_fen'=>$result['start_fen'],
+             'pgn'=>$result['pgn'],
            ]);
          } else {
           $game = new Game();
@@ -153,38 +117,9 @@ class GameController extends Controller
           $game->id_player_black = $result['id_player_black'];
           $game->start_time = $result['start_time'];
           $game->end_time = $result['end_time'];
-          $game->start_position = $result['start_position'];
-          $game->first_move = $result['first_move'];
-          $game->game_state_id = $result['game_state_id'];
+          $game->start_fen = $result['start_fen'];
+          $game->pgn = $result['pgn'];
           $game->save();
-         }
-         $game = Game::where('id',$result['id'])->first();
-         $moves_on_game = [];
-         foreach($row['attach'] as $attach){
-            $moves_on_game = $attach['moves_on_game'];
-         }
-         $moves_on_game_old = $game->Moves()->get();
-         foreach( $moves_on_game_old as $move_old ) {
-            $delete = true;
-            foreach( $moves_on_game as $move ) {
-               if ( $move_old->id === $move['id'] ) {
-                  $delete = false;
-               }
-            }
-            if ( $delete ) {
-               $game->Moves()->detach($move_old->id);
-            }
-         }
-         foreach( $moves_on_game as $move ) {
-            $add = true;
-            foreach( $moves_on_game_old as $move_old) {
-               if ( $move_old->id === $move['id'] ) {
-                  $add = false;
-               }
-            }
-            if ( $add ) {
-               $game->Moves()->attach($move['id']);
-            }
          }
        }
        DB::commit();

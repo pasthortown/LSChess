@@ -51,21 +51,12 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    $router->delete('/game', ['uses' => 'GameController@delete']);
    $router->post('/game/masive_load', ['uses' => 'GameController@masiveLoad']);
 
-   //CRUD GameState
-   $router->post('/gamestate', ['uses' => 'GameStateController@post']);
-   $router->get('/gamestate', ['uses' => 'GameStateController@get']);
-   $router->get('/gamestate/paginate', ['uses' => 'GameStateController@paginate']);
-   $router->get('/gamestate/backup', ['uses' => 'GameStateController@backup']);
-   $router->put('/gamestate', ['uses' => 'GameStateController@put']);
-   $router->delete('/gamestate', ['uses' => 'GameStateController@delete']);
-   $router->post('/gamestate/masive_load', ['uses' => 'GameStateController@masiveLoad']);
-
-   //CRUD Move
-   $router->post('/move', ['uses' => 'MoveController@post']);
-   $router->get('/move', ['uses' => 'MoveController@get']);
-   $router->get('/move/paginate', ['uses' => 'MoveController@paginate']);
-   $router->get('/move/backup', ['uses' => 'MoveController@backup']);
-   $router->put('/move', ['uses' => 'MoveController@put']);
-   $router->delete('/move', ['uses' => 'MoveController@delete']);
-   $router->post('/move/masive_load', ['uses' => 'MoveController@masiveLoad']);
+   //CRUD BestMove
+   $router->post('/bestmove', ['uses' => 'BestMoveController@post']);
+   $router->get('/bestmove', ['uses' => 'BestMoveController@get']);
+   $router->get('/bestmove/paginate', ['uses' => 'BestMoveController@paginate']);
+   $router->get('/bestmove/backup', ['uses' => 'BestMoveController@backup']);
+   $router->put('/bestmove', ['uses' => 'BestMoveController@put']);
+   $router->delete('/bestmove', ['uses' => 'BestMoveController@delete']);
+   $router->post('/bestmove/masive_load', ['uses' => 'BestMoveController@masiveLoad']);
 });

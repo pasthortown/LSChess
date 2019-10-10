@@ -4,29 +4,29 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 Use Exception;
-use App\GameState;
+use App\BestMove;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-class GameStateController extends Controller
+class BestMoveController extends Controller
 {
     function get(Request $data)
     {
        $id = $data['id'];
        if ($id == null) {
-          return response()->json(GameState::get(),200);
+          return response()->json(BestMove::get(),200);
        } else {
-          $gamestate = GameState::findOrFail($id);
+          $bestmove = BestMove::findOrFail($id);
           $attach = [];
-          return response()->json(["GameState"=>$gamestate, "attach"=>$attach],200);
+          return response()->json(["BestMove"=>$bestmove, "attach"=>$attach],200);
        }
     }
 
     function paginate(Request $data)
     {
        $size = $data['size'];
-       return response()->json(GameState::paginate($size),200);
+       return response()->json(BestMove::paginate($size),200);
     }
 
     function post(Request $data)
@@ -34,20 +34,21 @@ class GameStateController extends Controller
        try{
           DB::beginTransaction();
           $result = $data->json()->all();
-          $gamestate = new GameState();
-          $lastGameState = GameState::orderBy('id')->get()->last();
-          if($lastGameState) {
-             $gamestate->id = $lastGameState->id + 1;
+          $bestmove = new BestMove();
+          $lastBestMove = BestMove::orderBy('id')->get()->last();
+          if($lastBestMove) {
+             $bestmove->id = $lastBestMove->id + 1;
           } else {
-             $gamestate->id = 1;
+             $bestmove->id = 1;
           }
-          $gamestate->description = $result['description'];
-          $gamestate->save();
+          $bestmove->current_position = $result['current_position'];
+          $bestmove->response = $result['response'];
+          $bestmove->save();
           DB::commit();
        } catch (Exception $e) {
           return response()->json($e,400);
        }
-       return response()->json($gamestate,200);
+       return response()->json($bestmove,200);
     }
 
     function put(Request $data)
@@ -55,29 +56,30 @@ class GameStateController extends Controller
        try{
           DB::beginTransaction();
           $result = $data->json()->all();
-          $gamestate = GameState::where('id',$result['id'])->update([
-             'description'=>$result['description'],
+          $bestmove = BestMove::where('id',$result['id'])->update([
+             'current_position'=>$result['current_position'],
+             'response'=>$result['response'],
           ]);
           DB::commit();
        } catch (Exception $e) {
           return response()->json($e,400);
        }
-       return response()->json($gamestate,200);
+       return response()->json($bestmove,200);
     }
 
     function delete(Request $data)
     {
        $id = $data['id'];
-       return GameState::destroy($id);
+       return BestMove::destroy($id);
     }
 
     function backup(Request $data)
     {
-       $gamestates = GameState::get();
+       $bestmoves = BestMove::get();
        $toReturn = [];
-       foreach( $gamestates as $gamestate) {
+       foreach( $bestmoves as $bestmove) {
           $attach = [];
-          array_push($toReturn, ["GameState"=>$gamestate, "attach"=>$attach]);
+          array_push($toReturn, ["BestMove"=>$bestmove, "attach"=>$attach]);
        }
        return response()->json($toReturn,200);
     }
@@ -89,17 +91,19 @@ class GameStateController extends Controller
       try{
        DB::beginTransaction();
        foreach($masiveData as $row) {
-         $result = $row['GameState'];
-         $exist = GameState::where('id',$result['id'])->first();
+         $result = $row['BestMove'];
+         $exist = BestMove::where('id',$result['id'])->first();
          if ($exist) {
-           GameState::where('id', $result['id'])->update([
-             'description'=>$result['description'],
+           BestMove::where('id', $result['id'])->update([
+             'current_position'=>$result['current_position'],
+             'response'=>$result['response'],
            ]);
          } else {
-          $gamestate = new GameState();
-          $gamestate->id = $result['id'];
-          $gamestate->description = $result['description'];
-          $gamestate->save();
+          $bestmove = new BestMove();
+          $bestmove->id = $result['id'];
+          $bestmove->current_position = $result['current_position'];
+          $bestmove->response = $result['response'];
+          $bestmove->save();
          }
        }
        DB::commit();

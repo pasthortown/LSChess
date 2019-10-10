@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class GameState extends Model
+class BestMove extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -12,7 +12,7 @@ class GameState extends Model
      * @var array
      */
     protected $fillable = [
-       'description',
+       'current_position','response',
     ];
 
     /**
@@ -23,10 +23,5 @@ class GameState extends Model
     protected $hidden = [
        
     ];
-
-    function Game()
-    {
-       return $this->belongsTo('App\Game');
-    }
 
 }

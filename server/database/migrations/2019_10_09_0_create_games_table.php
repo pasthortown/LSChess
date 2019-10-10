@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMovesTable extends Migration
+class CreateGamesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,14 @@ class CreateMovesTable extends Migration
      */
     public function up()
     {
-       Schema::create('moves', function (Blueprint $table) {
+       Schema::create('games', function (Blueprint $table) {
           $table->increments('id');
           $table->timestamps();
-          $table->string('from',10)->nullable($value = true);
-          $table->string('to',10)->nullable($value = true);
-          $table->dateTime('moment')->nullable($value = true);
+          $table->integer('id_player_white')->nullable($value = true);
+          $table->integer('id_player_black')->nullable($value = true);
+          $table->dateTime('start_time')->nullable($value = true);
+          $table->dateTime('end_time')->nullable($value = true);
+          $table->string('start_fen',100)->nullable($value = true);
           $table->longText('pgn')->nullable($value = true);
        });
     }
@@ -30,6 +32,6 @@ class CreateMovesTable extends Migration
      */
     public function down()
     {
-       Schema::dropIfExists('moves');
+       Schema::dropIfExists('games');
     }
 }

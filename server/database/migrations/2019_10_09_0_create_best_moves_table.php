@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateGameMoveTable extends Migration
+class CreateBestMovesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,11 @@ class CreateGameMoveTable extends Migration
      */
     public function up()
     {
-       Schema::create('game_move', function (Blueprint $table) {
+       Schema::create('best_moves', function (Blueprint $table) {
           $table->increments('id');
           $table->timestamps();
-          $table->unsignedInteger('move_id');
-          $table->foreign('move_id')->references('id')->on('moves')->onDelete('cascade');
-          $table->unsignedInteger('game_id');
-          $table->foreign('game_id')->references('id')->on('games')->onDelete('cascade');
+          $table->string('current_position',100)->nullable($value = true);
+          $table->string('response',10)->nullable($value = true);
        });
     }
 
@@ -30,6 +28,6 @@ class CreateGameMoveTable extends Migration
      */
     public function down()
     {
-       Schema::dropIfExists('game_move');
+       Schema::dropIfExists('best_moves');
     }
 }

@@ -12,7 +12,7 @@ class Game extends Model
      * @var array
      */
     protected $fillable = [
-       'id_player_white','id_player_black','start_time','end_time','start_position','first_move',
+       'id_player_white','id_player_black','start_time','end_time','start_fen','pgn',
     ];
 
     /**
@@ -23,15 +23,5 @@ class Game extends Model
     protected $hidden = [
        
     ];
-
-    function GameState()
-    {
-       return $this->hasOne('App\GameState');
-    }
-
-    function Moves()
-    {
-       return $this->belongsToMany('App\Move')->withTimestamps();
-    }
 
 }
