@@ -10,6 +10,7 @@ import { NgbModal, NgbModalOptions } from "@ng-bootstrap/ng-bootstrap";
 import { Piece } from 'src/app/models/negocio/piece';
 import { BestMoveService } from 'src/app/services/CRUD/LSCHESS/bestmove.service';
 import { BestMove } from 'src/app/models/LSCHESS/BestMove';
+import { StockFishService } from 'src/app/services/negocio/stockfish.service';
 
 @Component({
     selector: 'app-main',
@@ -49,7 +50,9 @@ export class MainComponent implements OnInit {
     addingPiece = new Piece('');
     new_best_move = new BestMove();
 
-    constructor(private modalDialog: NgbModal, private bestMoveDataService: BestMoveService) {
+    constructor(private modalDialog: NgbModal,
+      private bestMoveDataService: BestMoveService,
+      private stockfishDataService: StockFishService) {
         this.board = new Board(this.chess.fen().split(' ')[0],5);
     }
 
@@ -405,14 +408,11 @@ export class MainComponent implements OnInit {
       }
     
       play_pc() {
-        /*
-        const gameOver = this.chess.game_over();
-        if (!gameOver) {
-          let possibleMoves = this.get_possible_moves();
-          let move = possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
-          this.chess.move(move);
+        this.stockfishDataService.get_best_move(this.chess.fen(), 1000).then( r => {
+          this.chess.move({ from: r.from, to: r.to });
           this.refresh_board();
-        }*/
+        }).catch( e => { console.log(e); });
+        /*console.log(this.chess.fen());
         this.new_best_move.current_position = this.chess.fen().split(' ')[0] + ' ' + this.chess.turn();
         this.bestMoveDataService.find(this.new_best_move.current_position).then( r => {
           const response = r as any[];
@@ -420,7 +420,7 @@ export class MainComponent implements OnInit {
             this.chess.move(response[0].response);
             this.refresh_board();
           }
-        }).catch( e => { console.log(e); });
+        }).catch( e => { console.log(e); });*/
       }
     
       establecerPosicion() {
