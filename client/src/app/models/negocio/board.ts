@@ -1,7 +1,7 @@
 import { Piece } from "./piece";
 
 export class Board {
-    private pieces: any[];
+    public pieces: any[];
     public position = [];
     public game_time = 0;
     public captured_by_white: Piece[] = [];
