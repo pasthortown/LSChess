@@ -44,7 +44,7 @@ name="files[]"
                 *ngFor="let piece of square_row; let column = index;"
                 (click)="move(row, column)"
                 >
-                <span class="{{ piece.image }}"></span>
+                <div class="{{ piece.image }}"></div>
                 </td>
             </tr>
             <tr *ngIf="board.white_side">
@@ -96,7 +96,7 @@ name="files[]"
                         <tr>
                             <th>Capturas <strong *ngIf="(value_of_position.white_pieces - value_of_position.black_pieces > 0) && (value_of_position.white_pieces - value_of_position.black_pieces < 1039)">+{{value_of_position.white_pieces - value_of_position.black_pieces}}</strong></th>
                             <td>
-                                <i *ngFor="let piece of board.captured_by_white" class="{{ piece.image }}" style="margin-left: 5px;"></i>
+                                <div *ngFor="let piece of board.captured_by_white" class="{{ piece.image }}" style="display:inline-block; width: 20px; height: 20px;"></div>
                             </td>
                         </tr>
                         <tr>
@@ -111,7 +111,7 @@ name="files[]"
                         <tr>
                             <th>Capturas <strong *ngIf="(value_of_position.black_pieces - value_of_position.white_pieces > 0) && (value_of_position.black_pieces - value_of_position.white_pieces < 1039)">+{{value_of_position.black_pieces - value_of_position.white_pieces}}</strong></th>
                             <td>
-                                <i *ngFor="let piece of board.captured_by_black" class="{{ piece.image }}" style="margin-left: 5px;"></i>
+                                <div *ngFor="let piece of board.captured_by_black" class="{{ piece.image }}" style="display:inline-block; margin-left: 5px; width: 20px; height: 20px;"></div>
                             </td>
                         </tr>
                         <tr>
@@ -132,7 +132,7 @@ name="files[]"
                         *ngFor="let piece of row_square; let column = index;"
                         (click)="selectBuildingPiece(row, column)"
                         >
-                        <span class="{{ piece.image }}"></span>
+                        <div class="{{ piece.image }}"></div>
                         </td>
                     </tr>
                 </table>
@@ -181,7 +181,7 @@ name="files[]"
             *ngFor="let piece of board.piecesPromote"
             (click)="c(piece.name)" class="square"
           >
-            <span class="{{ piece.image }}"></span>
+            <div class="{{ piece.image }}"></div>
           </td>
         </tr>
       </table>

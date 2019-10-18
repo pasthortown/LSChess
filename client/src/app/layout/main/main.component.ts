@@ -408,19 +408,18 @@ export class MainComponent implements OnInit {
       }
     
       play_pc() {
-        this.stockfishDataService.get_best_move(this.chess.fen(), 1000).then( r => {
-          this.chess.move({ from: r.from, to: r.to });
-          this.refresh_board();
-        }).catch( e => { console.log(e); });
-        /*console.log(this.chess.fen());
-        this.new_best_move.current_position = this.chess.fen().split(' ')[0] + ' ' + this.chess.turn();
-        this.bestMoveDataService.find(this.new_best_move.current_position).then( r => {
-          const response = r as any[];
-          if (response.length > 0) {
-            this.chess.move(response[0].response);
+        this.new_best_move.current_position = this.chess.fen().split(' ')[0] + ' ' + this.chess.turn();  
+        this.bestMoveDataService.find(this.new_best_move.current_position).then( rbdd => {
+          
+          this.stockfishDataService.get_best_move(this.chess.fen(), 1000).then( r_stockfish => {
+            this.new_best_move.response = JSON.stringify(r_stockfish);
+            this.bestMoveDataService.post(this.new_best_move).then( r_learned => {
+              console.log('Aprendido');
+            }).catch( e => { console.log(e); });
+            this.chess.move({ from: r_stockfish.from, to: r_stockfish.to });
             this.refresh_board();
-          }
-        }).catch( e => { console.log(e); });*/
+          }).catch( e => { console.log(e); });
+        }).catch( e => { console.log(e); });
       }
     
       establecerPosicion() {

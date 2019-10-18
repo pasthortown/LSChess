@@ -5,6 +5,7 @@ export class Piece {
     image: string;
     max_count: number;
     symbol: string;
+    is_disabled: boolean;
 
     constructor(symbol?: string, color?: string) {
         if ( typeof symbol === 'undefined') {
@@ -74,6 +75,7 @@ export class Piece {
 
     public set(name: string, color: string) {
         this.name = name;
+
         this.color = color;
         const Valores = {
             rook: 5,
@@ -103,7 +105,24 @@ export class Piece {
 
     public refresh() {
         if (this.name !== '') {
-            this.image = this.color + ' fas fa-chess-' + this.name;
+            if (this.color == 'selected') {
+                this.image = 'selected white' + this.name;
+            }
+            if (this.color == 'shadow') {
+                this.image = 'shadow white' + this.name;
+            }
+            if (this.color == 'capture') {
+                this.image = 'capture white' + this.name;   
+            }
+            if (this.color == 'check') {
+                this.image = 'check white' + this.name;
+            }
+            if (this.color == 'disabled') {
+                this.image = 'disabled white' + this.name;
+            }
+            if (this.color === 'black' || this.color === 'white') {
+                this.image = this.color + this.name;
+            }
         } else {
             this.image = '';
         }

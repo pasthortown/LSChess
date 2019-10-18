@@ -135,7 +135,7 @@ export class Board {
     }
 
     selectPiece(row: number, column: number) {
-        this.pieces[row][column].setColor('selected');
+        this.pieces[row][column].select();
     }
 
     disableMaxCounts() {
