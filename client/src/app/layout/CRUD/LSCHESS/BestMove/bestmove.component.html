@@ -33,6 +33,9 @@
                <th>Seleccionado</th>
                <th>current_position</th>
                <th>response</th>
+               <th>from</th>
+               <th>to</th>
+               <th>is__best</th>
             </tr>
          </thead>
          <tbody>
@@ -40,6 +43,9 @@
                <td class="text-right"><span *ngIf="best_moveSelected === best_move" class="far fa-hand-point-right"></span></td>
                <td>{{best_move.current_position}}</td>
                <td>{{best_move.response}}</td>
+               <td>{{best_move.from}}</td>
+               <td>{{best_move.to}}</td>
+               <td>{{best_move.is__best}}</td>
             </tr>
          </tbody>
       </table>
@@ -86,6 +92,24 @@
                <label for="response" class="col-4 col-form-label">response</label>
                <div class="col-8">
                   <input type="text" class="form-control" id="response" name="response" placeholder="response" [(ngModel)]="best_moveSelected.response">
+               </div>
+            </div>
+            <div class="form-group row">
+               <label for="from" class="col-4 col-form-label">from</label>
+               <div class="col-8">
+                  <input type="text" class="form-control" id="from" name="from" placeholder="from" [(ngModel)]="best_moveSelected.from">
+               </div>
+            </div>
+            <div class="form-group row">
+               <label for="to" class="col-4 col-form-label">to</label>
+               <div class="col-8">
+                  <input type="text" class="form-control" id="to" name="to" placeholder="to" [(ngModel)]="best_moveSelected.to">
+               </div>
+            </div>
+            <div class="form-group row">
+               <label for="is__best" class="col-4 col-form-label">is__best</label>
+               <div class="col-8">
+                  <label class="switch"><input type="checkbox"id="is__best" name="is__best" [(ngModel)]="best_moveSelected.is__best"><span class="slider round"></span></label>
                </div>
             </div>
          </div>

@@ -49,7 +49,11 @@ export class MainComponent implements OnInit {
     editing_from = {row: null, colum: null};
     addingPiece = new Piece('');
     new_best_move = new BestMove();
-
+    last_move = new Move();
+    color_play_pc = 'none';
+    can_play_pc = false;
+    analizando = false;
+    profundidad_analisis = 0;
     constructor(private modalDialog: NgbModal,
       private bestMoveDataService: BestMoveService,
       private stockfishDataService: StockFishService) {
@@ -92,6 +96,27 @@ export class MainComponent implements OnInit {
         this.editing_from.colum = null;
         this.editing_from.row = null;
         this.addingPiece = this.board.selectAddingPiece(row, colum);
+      }
+
+      analizar() {
+        if (this.analizando) {
+          this.analizando = false;
+        } else {
+          this.analizando = true;
+        }
+        if (!this.analizando) {
+          Swal.fire({
+            title: 'Profundidad de Análisis',
+            input: 'number',
+            confirmButtonText: 'Iniciar',
+          }).then((result) => {
+            if (result.value > 0) {
+              this.profundidad_analisis = result.value;
+            } else {
+              this.profundidad_analisis = 1;
+            }
+          });
+        }
       }
 
       evaluateBoard(turn) {
@@ -269,6 +294,23 @@ export class MainComponent implements OnInit {
         this.check_specials();
       }
     
+      play_against_human() {
+        this.can_play_pc = false;
+        this.color_play_pc = 'none';
+      }
+
+      play_against_pc() {
+        this.can_play_pc = true;
+        this.color_play_pc = this.get_turn();
+        this.play_pc();
+      }
+
+      play_pc_against_pc() {
+        this.can_play_pc = true;
+        this.color_play_pc = 'both';
+        this.play_pc();
+      }
+
       save_pgn() {
         const backupData = {pgn: this.chess.pgn(),
                             player_white: this.player_white,
@@ -396,29 +438,70 @@ export class MainComponent implements OnInit {
               pawn: 'p',
             };
             this.chess.move({ from: from, to: to, promotion: pieces[result]});
+            this.last_move.from = from;
+            this.last_move.to = to;
             this.learn_move();
             this.newMove = new Move();
             this.refresh_board();
+            if (this.can_play_pc) {
+              this.play_pc();
+            }
         }, cancel => {
             this.chess.move({ from: from, to: to, promotion: 'q'});
+            this.last_move.from = from;
+            this.last_move.to = to;
             this.learn_move();
             this.newMove = new Move();
             this.refresh_board();
+            if (this.can_play_pc) {
+              this.play_pc();
+            }
         });
       }
     
       play_pc() {
         this.new_best_move.current_position = this.chess.fen().split(' ')[0] + ' ' + this.chess.turn();  
         this.bestMoveDataService.find(this.new_best_move.current_position).then( rbdd => {
-          
-          this.stockfishDataService.get_best_move(this.chess.fen(), 1000).then( r_stockfish => {
-            this.new_best_move.response = JSON.stringify(r_stockfish);
-            this.bestMoveDataService.post(this.new_best_move).then( r_learned => {
-              console.log('Aprendido');
-            }).catch( e => { console.log(e); });
-            this.chess.move({ from: r_stockfish.from, to: r_stockfish.to });
+          const best_moves = rbdd as any[];
+          if (best_moves.length == 0) {
+            this.stockfishDataService.get_best_move(this.chess.fen(), 4000).then( r_stockfish => {
+              if(r_stockfish.promotion == '') {
+                this.chess.move({ from: r_stockfish.from, to: r_stockfish.to });
+              } else {
+                this.chess.move({ from: r_stockfish.from, to: r_stockfish.to, promotion: r_stockfish.promotion });
+              }
+              this.last_move.from = r_stockfish.from;
+              this.last_move.to = r_stockfish.to;
+              this.new_best_move.response = this.get_last_move();
+              this.new_best_move.from = r_stockfish.from;
+              this.new_best_move.to = r_stockfish.to;
+              this.new_best_move.is__best = true;
+              this.bestMoveDataService.post(this.new_best_move).then( r_learned => {
+                console.log('Aprendido');
+                if (this.color_play_pc == 'both' ) {
+                  this.play_pc();
+                }
+              }).catch( e => { console.log(e); });
+              this.refresh_board();
+            }).catch( e => {
+              Swal.fire({
+                title: 'Me Rindo!',
+                text: 'Muy bien jugado. Felicidades!!!',
+                type: 'success',
+                confirmButtonText: 'Aceptar'
+              }).then(r => {
+                this.new_game();
+              });
+            });
+          } else {
+            this.chess.move(rbdd[0].response);
+            this.last_move.from = rbdd[0].from;
+            this.last_move.to = rbdd[0].to;
             this.refresh_board();
-          }).catch( e => { console.log(e); });
+            if (this.color_play_pc == 'both' ) {
+              this.play_pc();
+            }
+          }
         }).catch( e => { console.log(e); });
       }
     
@@ -430,12 +513,20 @@ export class MainComponent implements OnInit {
       refresh_board() {
         this.board.newPosition(this.chess.fen().split(' ')[0]);
         this.current_position = this.chess.pgn({ max_width: 5, newline_char: '\n' });
+        this.board.show_last_move(this.last_move);
         this.check_specials();
       }
-    
+
       move(row_selected: number, column_selected: number) {
+        if (this.color_play_pc == 'both') {
+          return;
+        }
+        if (this.color_play_pc == this.get_turn()) {
+          return;
+        }
         let row = 0;
         let column = 0;
+        this.last_move = new Move();
         if(this.board.white_side) {
           row = row_selected;
           column = column_selected;
@@ -518,11 +609,16 @@ export class MainComponent implements OnInit {
               this.showPropotionMenu(this.newMove.from, this.newMove.to);
             } else {
               this.chess.move({ from: this.newMove.from, to: this.newMove.to });
+              this.last_move.from = this.newMove.from;
+              this.last_move.to = this.newMove.to;
               this.learn_move();
               this.refresh_board();
               this.newMove = new Move();
               this.current_move++;
               this.checking_move = this.current_move;
+              if (this.can_play_pc) {
+                this.play_pc();
+              }
             }
           }
         }
@@ -536,18 +632,19 @@ export class MainComponent implements OnInit {
           r => {
             const response = r as any[];
             this.new_best_move.response = this.get_last_move();
-            let in_knowledge = false;
-            response.forEach(best_response => {
-              if (best_response.response == this.new_best_move.response) {
-                in_knowledge = true;
-              }
-            });
-            if (!in_knowledge) {
+            if (response.length == 0) {
               this.bestMoveDataService.post(this.new_best_move).then(r1 => {
                 console.log('Aprendido');
               }).catch( e => { console.log(e); });
             } else {
-              console.log('Conocido');
+              this.new_best_move.id = response[0].id;
+              if (response[0].response != this.get_last_move()) {
+                this.bestMoveDataService.put(this.new_best_move).then(r1 => {
+                  console.log('Aprendido');
+                }).catch( e => { console.log(e); });
+              } else {
+                console.log('Conocido');
+              }
             }
           }
         ).catch( e => { console.log(e); });

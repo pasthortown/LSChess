@@ -21,7 +21,7 @@ export class StockFishService {
       return this.http.post(this.url + 'get_best_move', JSON.stringify(data), this.options).toPromise()
       .then( r => {
          return r.json();
-      }).catch( error => { this.handledError(error.json()); });
+      }).catch( error => { error.json(); });
    }
    
    handledError(error: any) {

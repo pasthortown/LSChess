@@ -6,6 +6,7 @@ export class Piece {
     max_count: number;
     symbol: string;
     is_disabled: boolean;
+    border_css: string;
 
     constructor(symbol?: string, color?: string) {
         if ( typeof symbol === 'undefined') {
@@ -17,6 +18,7 @@ export class Piece {
         } else {
             this.getPiece(symbol, color);
         }
+        this.border_css = '';
     }
 
     getPiece(symbol: string, color?: string) {

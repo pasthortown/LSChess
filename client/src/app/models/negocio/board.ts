@@ -1,4 +1,5 @@
 import { Piece } from "./piece";
+import { Move } from './move';
 
 export class Board {
     public pieces: any[];
@@ -232,6 +233,53 @@ export class Board {
                 this.pieces[row][column] = new Piece(possibleMove.captured, 'capture');
             } 
         });
+    }
+
+    show_last_move(last_move: Move) {
+        let coordsX = { a: '0',
+                        b: '1',
+                        c: '2',
+                        d: '3',
+                        e: '4',
+                        f: '5',
+                        g: '6',
+                        h: '7',
+        };
+        let coordsY = { 8: '0',
+                        7: '1',
+                        6: '2',
+                        5: '3',
+                        4: '4',
+                        3: '5',
+                        2: '6',
+                        1: '7',
+        };
+        if (!this.white_side) {
+            coordsX = { a: '7',
+                        b: '6',
+                        c: '5',
+                        d: '4',
+                        e: '3',
+                        f: '2',
+                        g: '1',
+                        h: '0',
+            };
+            coordsY = { 8: '7',
+                        7: '6',
+                        6: '5',
+                        5: '4',
+                        4: '3',
+                        3: '2',
+                        2: '1',
+                        1: '0',
+            };
+        }
+        const columnFrom = coordsX[last_move.from.substr(0,1)];
+        const rowFrom = coordsY[last_move.from.substr(1,1)];
+        const columnTo = coordsX[last_move.to.substr(0,1)];
+        const rowTo = coordsY[last_move.to.substr(1,1)];
+        this.pieces[rowFrom][columnFrom].border_css = 'space-from';
+        this.pieces[rowTo][columnTo].border_css = 'space-to';
     }
 
     get_piece(row, column): Piece {

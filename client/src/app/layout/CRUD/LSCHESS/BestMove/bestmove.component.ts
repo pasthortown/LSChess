@@ -85,9 +85,9 @@ export class BestMoveComponent implements OnInit {
    toCSV() {
       this.best_moveDataService.get().then( r => {
          const backupData = r as BestMove[];
-         let output = 'id;current_position;response\n';
+         let output = 'id;current_position;response;from;to;is__best\n';
          backupData.forEach(element => {
-            output += element.id; + element.current_position + ';' + element.response + '\n';
+            output += element.id; + element.current_position + ';' + element.response + ';' + element.from + ';' + element.to + ';' + element.is__best + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();

@@ -9,7 +9,7 @@
 .tablero tr:nth-child(odd) td:nth-child(even),
 .tablero tr:nth-child(even) td:nth-child(odd) {
   background: #f0f0f5;
-  background-image: url("./../../../assets/images/board/lightsquare.png");
+  background-image: url("http://desarrollo.lschess/assets/images/board/lightsquare.png");
   background-repeat: no-repeat, no-repeat;
   background-size: cover;
   background-position: center;
@@ -21,7 +21,7 @@
 .tablero tr:nth-child(odd) td:nth-child(odd),
 .tablero tr:nth-child(even) td:nth-child(even) {
   background: #29293d;
-  background-image: url("./../../../assets/images/board/darksquare.png");
+  background-image: url("http://desarrollo.lschess/assets/images/board/darksquare.png");
   background-repeat: no-repeat, no-repeat;
   background-size: cover;
   background-position: center;
@@ -55,9 +55,8 @@
 }
 
 .square {
-  width: 9vh;
-  height: 9vh;
-  font-size: 5vh;
+  padding: 0px;
+  margin: 0px;
 }
 
 .historical {
@@ -95,7 +94,7 @@
 }
 
 .capture {
-  -webkit-filter: invert(40%) grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-50deg) saturate(400%) contrast(2);
+  -webkit-filter: invert(40%) grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-20deg) saturate(400%) contrast(2);
   filter: grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-20deg) saturate(600%) contrast(0.8);
 }
 
@@ -105,121 +104,106 @@
 }
 
 .blackrook {
-  margin: auto;
-  width: 6vh;
-  height: 6vh;
-  background-image: url("./../../../assets/images/board/br.png");
+  background-image: url("http://desarrollo.lschess/assets/images/board/br.png");
   background-repeat: no-repeat, no-repeat;
   background-size: cover;
   background-position: center;
 }
 
 .blackknight {
-  margin: auto;
-  width: 6vh;
-  height: 6vh;
-  background-image: url("./../../../assets/images/board/bn.png");
+  background-image: url("http://desarrollo.lschess/assets/images/board/bn.png");
   background-repeat: no-repeat, no-repeat;
   background-size: cover;
   background-position: center;
 }
 
 .blackbishop {
-  margin: auto;
-  width: 6vh;
-  height: 6vh;
-  background-image: url("./../../../assets/images/board/bb.png");
+  background-image: url("http://desarrollo.lschess/assets/images/board/bb.png");
   background-repeat: no-repeat, no-repeat;
   background-size: cover;
   background-position: center;
 }
 
 .blackqueen {
-  margin: auto;
-  width: 6vh;
-  height: 6vh;
-  background-image: url("./../../../assets/images/board/bq.png");
+  background-image: url("http://desarrollo.lschess/assets/images/board/bq.png");
   background-repeat: no-repeat, no-repeat;
   background-size: cover;
   background-position: center;
 }
 
 .blackking {
-  margin: auto;
-  width: 6vh;
-  height: 6vh;
-  background-image: url("./../../../assets/images/board/bk.png");
+  background-image: url("http://desarrollo.lschess/assets/images/board/bk.png");
   background-repeat: no-repeat, no-repeat;
   background-size: cover;
   background-position: center;
 }
 
 .blackpawn {
-  margin: auto;
-  width: 6vh;
-  height: 6vh;
-  background-image: url("./../../../assets/images/board/bp.png");
+  background-image: url("http://desarrollo.lschess/assets/images/board/bp.png");
   background-repeat: no-repeat, no-repeat;
   background-size: cover;
   background-position: center;
 }
 
 .whiterook {
-  margin: auto;
-  width: 6vh;
-  height: 6vh;
-  background-image: url("./../../../assets/images/board/wr.png");
+  background-image: url("http://desarrollo.lschess/assets/images/board/wr.png");
   background-repeat: no-repeat, no-repeat;
   background-size: cover;
   background-position: center;
 }
 
 .whiteknight {
-  margin: auto;
-  width: 6vh;
-  height: 6vh;
-  background-image: url("./../../../assets/images/board/wn.png");
+  background-image: url("http://desarrollo.lschess/assets/images/board/wn.png");
   background-repeat: no-repeat, no-repeat;
   background-size: cover;
   background-position: center;
 }
 
 .whitebishop {
-  margin: auto;
-  width: 6vh;
-  height: 6vh;
-  background-image: url("./../../../assets/images/board/wb.png");
+  background-image: url("http://desarrollo.lschess/assets/images/board/wb.png");
   background-repeat: no-repeat, no-repeat;
   background-size: cover;
   background-position: center;
 }
 
 .whitequeen {
-  margin: auto;
-  width: 6vh;
-  height: 6vh;
-  background-image: url("./../../../assets/images/board/wq.png");
+  background-image: url("http://desarrollo.lschess/assets/images/board/wq.png");
   background-repeat: no-repeat, no-repeat;
   background-size: cover;
   background-position: center;
 }
 
-.whiteking {
-  margin: auto;
-  width: 6vh;
-  height: 6vh;
-  background-image: url("./../../../assets/images/board/wk.png");
+.whiteking {  
+  background-image: url("http://desarrollo.lschess/assets/images/board/wk.png");
   background-repeat: no-repeat, no-repeat;
   background-size: cover;
   background-position: center;
 }
 
 .whitepawn {
-  margin: auto;
-  width: 6vh;
-  height: 6vh;
-  background-image: url("./../../../assets/images/board/wp.png");
+  background-image: url("http://desarrollo.lschess/assets/images/board/wp.png");
   background-repeat: no-repeat, no-repeat;
   background-size: cover;
   background-position: center;
+}
+
+.space {
+  margin: auto;
+  width: 7.5vh;
+  height: 7.5vh;
+  border-style: solid;
+  border-color: transparent;
+  border-width: 5px;
+}
+
+.space-from {
+  border-style: solid;
+  border-color: rgba(255, 255, 0, 0.5);
+  border-width: 5px;
+}
+
+.space-to {
+  border-style: solid;
+  border-color: rgba(241, 112, 6, 0.5);;
+  border-width: 5px;
 }
